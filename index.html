@@ -655,20 +655,9 @@
   <div id="app">...جاري التحميل</div>
 
   <script>
-    // Mobile sidebar behavior
+    // Start with sidebar closed on mobile (before docsify loads to avoid flash)
     if (window.innerWidth <= 768) {
       document.body.classList.add('close');
-
-      // Create backdrop overlay
-      var backdrop = document.createElement('div');
-      backdrop.className = 'sidebar-backdrop';
-      document.body.appendChild(backdrop);
-
-      // Close sidebar when backdrop is tapped
-      backdrop.addEventListener('click', function () {
-        document.body.classList.add('close');
-      });
-
     }
   </script>
 
@@ -702,7 +691,20 @@
       },
 
       plugins: [
-        function mobileSidebarClose(hook) {
+        function mobileSidebar(hook) {
+          hook.ready(function () {
+            if (window.innerWidth <= 768) {
+              document.body.classList.add('close');
+              // Create backdrop overlay
+              var backdrop = document.createElement('div');
+              backdrop.className = 'sidebar-backdrop';
+              document.body.appendChild(backdrop);
+              backdrop.addEventListener('click', function (e) {
+                e.stopPropagation();
+                document.body.classList.add('close');
+              });
+            }
+          });
           hook.doneEach(function () {
             if (window.innerWidth <= 768) {
               document.body.classList.add('close');

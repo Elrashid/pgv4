@@ -4,6 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لائحة الدراسات العليا - كلية الإمام مالك للشريعة والقانون</title>
+  <meta name="description" content="لائحة الدراسات العليا (ماجستير ودكتوراه) في كلية الإمام مالك للشريعة والقانون بدبي - ١٣٧ مادة تنظيمية تشمل القبول والدراسة والتخرج. Graduate Studies Regulations - Imam Malik College of Sharia and Law, Dubai.">
+  <meta name="keywords" content="لائحة الدراسات العليا, كلية الإمام مالك, الشريعة والقانون, دبي, ماجستير, دكتوراه, graduate studies, Imam Malik College, Dubai">
+  <meta name="author" content="كلية الإمام مالك للشريعة والقانون">
+  <link rel="canonical" href="https://elrashid.github.io/pgv4/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="لائحة الدراسات العليا - كلية الإمام مالك للشريعة والقانون">
+  <meta property="og:description" content="١٣٧ مادة تنظيمية للدراسات العليا تشمل القبول والدراسة والتخرج والرسائل العلمية">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://elrashid.github.io/pgv4/">
+  <meta property="og:locale" content="ar_AE">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Legislation",
+    "name": "لائحة الدراسات العليا - كلية الإمام مالك للشريعة والقانون",
+    "alternateName": "Graduate Studies Regulations - Imam Malik College of Sharia and Law",
+    "description": "Complete academic regulations for graduate studies (Master's and PhD programs) covering 137 articles on admissions, study systems, grading, thesis requirements, and graduation.",
+    "inLanguage": "ar",
+    "url": "https://elrashid.github.io/pgv4/",
+    "legislationJurisdiction": {
+      "@type": "AdministrativeArea",
+      "name": "Dubai, UAE"
+    },
+    "publisher": {
+      "@type": "EducationalOrganization",
+      "name": "كلية الإمام مالك للشريعة والقانون",
+      "alternateName": "Imam Malik College of Sharia and Law",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dubai",
+        "addressCountry": "AE"
+      }
+    },
+    "hasPart": [
+      {
+        "@type": "Legislation",
+        "name": "الباب الأول: رؤية الكلية ورسالتها وأهدافها",
+        "alternateName": "Chapter 1: College Vision, Mission & Objectives",
+        "description": "Articles 1-9"
+      },
+      {
+        "@type": "Legislation",
+        "name": "الباب الثاني: البرنامج التعليمي",
+        "alternateName": "Chapter 2: Academic Program",
+        "description": "Articles 10-137 covering degrees, admission, study system, grading, and graduation"
+      }
+    ]
+  }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <!-- Docsify theme -->
@@ -848,5 +901,182 @@
 
   <!-- Pagination plugin -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+
+  <!-- WebMCP - expose site content to MCP-compatible AI tools -->
+  <script src="https://cdn.jsdelivr.net/gh/jasonjmcghee/WebMCP@main/webmcp.js"></script>
+  <script>
+    (function() {
+      if (typeof WebMCP === 'undefined') return;
+
+      var mcp = new WebMCP({
+        color: '#1B5E20',
+        position: 'bottom-left',
+        size: '36px',
+        padding: '12px'
+      });
+
+      // Tool: Search articles by number
+      mcp.registerTool(
+        'search_article',
+        'Search for a specific article (مادة) by number in the graduate studies regulations',
+        { article_number: { type: 'string', description: 'Article number (e.g. "39" or "١٠٩")' } },
+        function(args) {
+          var num = args.article_number.replace(/[٠-٩]/g, function(d) {
+            return '٠١٢٣٤٥٦٧٨٩'.indexOf(d);
+          });
+          var els = document.querySelectorAll('.markdown-section h3, .markdown-section p, .markdown-section li');
+          var results = [];
+          var pattern = new RegExp('مادة.*[\\(\\s]' + num + '[\\)\\s]');
+          els.forEach(function(el) {
+            if (pattern.test(el.textContent)) {
+              results.push(el.textContent.trim().substring(0, 500));
+            }
+          });
+          if (results.length === 0) {
+            return { content: [{ type: 'text', text: 'Article ' + num + ' not found on the current page. Navigate to the correct section first.' }] };
+          }
+          return { content: [{ type: 'text', text: results.join('\n\n') }] };
+        }
+      );
+
+      // Tool: Get current page content
+      mcp.registerTool(
+        'get_page_content',
+        'Get the full text content of the currently displayed regulation page',
+        {},
+        function() {
+          var content = document.querySelector('.markdown-section');
+          return {
+            content: [{
+              type: 'text',
+              text: content ? content.innerText : 'No content loaded'
+            }]
+          };
+        }
+      );
+
+      // Tool: Navigate to a section
+      mcp.registerTool(
+        'navigate_to_section',
+        'Navigate to a specific section of the regulations by section code (e.g. "2-3-11" for grades)',
+        { section: { type: 'string', description: 'Section code like "1-1", "2-2-3", "2-3-11"' } },
+        function(args) {
+          var links = document.querySelectorAll('.sidebar-nav a');
+          var found = false;
+          links.forEach(function(link) {
+            if (link.href && link.href.indexOf(args.section) !== -1) {
+              link.click();
+              found = true;
+            }
+          });
+          return {
+            content: [{
+              type: 'text',
+              text: found ? 'Navigated to section ' + args.section : 'Section ' + args.section + ' not found in sidebar'
+            }]
+          };
+        }
+      );
+
+      // Tool: List all sections
+      mcp.registerTool(
+        'list_sections',
+        'List all available sections in the regulations with their titles',
+        {},
+        function() {
+          var links = document.querySelectorAll('.sidebar-nav a');
+          var sections = [];
+          links.forEach(function(link) {
+            if (link.textContent.trim()) {
+              sections.push(link.textContent.trim());
+            }
+          });
+          return {
+            content: [{
+              type: 'text',
+              text: sections.join('\n')
+            }]
+          };
+        }
+      );
+
+      // Resource: Expose the full regulations text
+      mcp.registerResource(
+        'regulations-full',
+        'Complete text of all 137 articles of the graduate studies regulations',
+        { uri: 'regulations://full', mimeType: 'text/plain' },
+        function(uri) {
+          return fetch('llms-full.txt').then(function(r) { return r.text(); }).then(function(text) {
+            return {
+              contents: [{
+                uri: uri,
+                mimeType: 'text/plain',
+                text: text
+              }]
+            };
+          });
+        }
+      );
+
+      // Resource: Expose the regulations index
+      mcp.registerResource(
+        'regulations-index',
+        'Curated index of all regulation sections with descriptions',
+        { uri: 'regulations://index', mimeType: 'text/plain' },
+        function(uri) {
+          return fetch('llms.txt').then(function(r) { return r.text(); }).then(function(text) {
+            return {
+              contents: [{
+                uri: uri,
+                mimeType: 'text/plain',
+                text: text
+              }]
+            };
+          });
+        }
+      );
+
+      // Prompt: Ask about admission requirements
+      mcp.registerPrompt(
+        'admission-requirements',
+        'Ask about admission requirements for graduate programs',
+        [{
+          name: 'program',
+          description: 'Program type: masters or phd',
+          required: false
+        }],
+        function(args) {
+          var prog = args.program || 'masters';
+          return {
+            messages: [{
+              role: 'user',
+              content: {
+                type: 'text',
+                text: 'Based on the graduate studies regulations of Imam Malik College (Dubai), what are the admission requirements for the ' + prog + ' program? Include GPA requirements, English proficiency, and document requirements. Cite specific article numbers.'
+              }
+            }]
+          };
+        }
+      );
+
+      // Prompt: Ask about graduation requirements
+      mcp.registerPrompt(
+        'graduation-requirements',
+        'Ask about graduation and thesis defense requirements',
+        [],
+        function() {
+          return {
+            messages: [{
+              role: 'user',
+              content: {
+                type: 'text',
+                text: 'Based on the graduate studies regulations of Imam Malik College (Dubai), what are all the graduation requirements? Include credit hours, GPA, thesis requirements, and defense procedures. Cite specific article numbers (مادة).'
+              }
+            }]
+          };
+        }
+      );
+    })();
+  </script>
 </body>
 </html>

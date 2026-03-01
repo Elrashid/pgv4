@@ -1,0 +1,55 @@
+# لائحة الدراسات العليا - كلية الإمام مالك للشريعة والقانون (دبي)
+# Graduate Studies Regulations - Imam Malik College of Sharia and Law (Dubai)
+
+> This documentation contains the complete academic regulations for graduate studies (Master's and PhD programs) at Imam Malik College of Sharia and Law in Dubai, UAE. It covers 137 articles organized into chapters on admissions, study systems, grading, academic warnings, thesis requirements, plagiarism, and graduation. All content is in Arabic with RTL layout.
+
+## المحتوى الرئيسي (Key Content)
+
+- [فهرس المحتويات (Table of Contents)](https://elrashid.github.io/pgv4/#/TOC): Full index of all 137 articles with page references
+- [خريطة المسار الزمني للماجستير (Master's Timeline)](https://elrashid.github.io/pgv4/master-timeline.html): Interactive timeline chart for master's student journey
+- [هرمية أولويات المخالفات (Academic Violations Hierarchy)](https://elrashid.github.io/pgv4/academic-priorities.html): Interactive priority chart for academic violations
+
+## الباب الأول: رؤية الكلية ورسالتها وأهدافها (Chapter 1: College Vision, Mission & Objectives)
+
+- [رؤية الكلية ورسالتها (Vision & Mission)](https://elrashid.github.io/pgv4/#/01_bab1_رؤية_الكلية/01_1-1_رؤية_الكلية_ورسالتها): Articles 1-2
+- [أهداف الكلية (College Objectives)](https://elrashid.github.io/pgv4/#/01_bab1_رؤية_الكلية/02_1-2_أهداف_الكلية): Article 3
+- [أهداف قسم الدراسات العليا (Graduate Department Objectives)](https://elrashid.github.io/pgv4/#/01_bab1_رؤية_الكلية/03_1-3_أهداف_قسم_الدراسات_العليا): Article 4
+- [إنشاء قسم الدراسات العليا (Establishing the Graduate Department)](https://elrashid.github.io/pgv4/#/01_bab1_رؤية_الكلية/04_1-4_إنشاء_قسم_الدراسات_العليا): Articles 5-9
+
+## الباب الثاني: البرنامج التعليمي (Chapter 2: Academic Program)
+
+### الشهادات (Degrees)
+- [الشهادات التي يمنحها القسم (Degrees Offered)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/01_2-1_الشهادات/01_الشهادات_التي_يمنحها_القسم): Programs and credit hour distribution
+
+### سياسات القبول والتسجيل (Admission & Registration Policies)
+- [الإرشاد الأكاديمي (Academic Advising)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/01_2-2-1_الإرشاد_الأكاديمي): Article 10-11
+- [مواعيد القبول (Admission Dates)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/02_2-2-2_مواعيد_القبول): Articles on admission calendar
+- [شروط القبول (Admission Requirements)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/03_2-2-3_شروط_القبول): Articles 12-20 — GPA requirements, English proficiency, conditional admission
+- [تأجيل القبول (Deferral)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/04_2-2-4_تأجيل_القبول): Articles 22-28 — max 2 semesters deferral
+- [الانسحاب والإضافة (Add/Drop)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/05_2-2-5_الانسحاب_والإضافة): Course withdrawal policies
+- [التحويل داخل الكلية (Internal Transfer)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/06_2-2-6_التحويل_داخل_الكلية): Transfer between programs
+- [التحويل من خارج الكلية (External Transfer)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/02_2-2_سياسات_القبول/07_2-2-7_التحويل_من_خارج_الكلية): Articles 39-42
+
+### نظام الدراسة ومتطلبات التخرج (Study System & Graduation Requirements)
+- [نظام الساعات المعتمدة (Credit Hour System)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/01_2-3-1_نظام_الساعات_المعتمدة): Articles 43-50 — 33 credit hours for Master's
+- [لغة التدريس (Language of Instruction)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/02_2-3-2_لغة_التدريس): Articles 51-58
+- [معايير الرسائل العلمية (Thesis Standards)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/03_2-3-3_معايير_الرسائل_العلمية): Articles 59-71
+- [آليات تحديد موضوع الرسالة (Thesis Topic Selection)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/04_2-3-4_آليات_تحديد_موضوع_الرسالة): Research proposal procedures
+- [مدة الدراسة (Program Duration)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/05_2-3-5_مدة_الدراسة): Articles 72-77 — 3-6 semesters for Master's
+- [العبء الدراسي (Course Load)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/06_2-3-6_العبء_الدراسي): Articles 78-81 — 9-12 credit hours per semester
+- [المواظبة والحضور (Attendance)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/07_2-3-7_المواظبة_والحضور): Articles 82-85 — 30% absence = fail
+- [تقويم أداء الطلبة (Student Assessment)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/08_2-3-8_تقويم_أداء_الطلبة): Articles 86-93
+- [امتحانات نهاية الفصول (Final Exams)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/09_2-3-9_امتحانات_نهاية_الفصول): Articles 94-102
+- [التخلف عن الامتحان (Exam Absence)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/10_2-3-10_التخلف_عن_الامتحان): Articles 103-108
+- [العلامات والتقديرات (Grades & GPA)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/11_2-3-11_العلامات_والتقديرات): Articles 109-116 — grading scale, honors
+- [الإنذارات الأكاديمية (Academic Warnings)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/12_2-3-12_الإنذارات_الأكاديمية): Articles 117-121 — 3 warnings then dismissal
+- [إعادة دراسة المواد (Course Retake)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/13_2-3-13_إعادة_دراسة_المواد): Articles 122-124
+- [متطلبات التخرج (Graduation Requirements)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/14_2-3-14_متطلبات_التخرج): Articles 125-131
+- [سجلات الطلبة (Student Records)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/15_2-3-15_سجلات_الطلبة): Record keeping policies
+- [أحكام الانتحال العلمي (Plagiarism)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/16_2-3-16_أحكام_الانتحال_العلمي): Articles 132-136 — ≤20% similarity allowed
+- [تطوير الخطة الدراسية (Curriculum Development)](https://elrashid.github.io/pgv4/#/02_bab2_البرنامج_التعليمي/03_2-3_نظام_الدراسة/17_2-3-17_تطوير_الخطة_الدراسية): Article 137
+
+## الملاحق (Appendices)
+- [تسجيل الرسائل العلمية (Thesis Registration)](https://elrashid.github.io/pgv4/#/03_الملاحق/01_تسجيل_الرسائل_العلمية): Registration procedures and forms
+- [إعداد ومناقشة الرسائل (Thesis Preparation & Defense)](https://elrashid.github.io/pgv4/#/03_الملاحق/02_إعداد_ومناقشة_الرسائل): Defense committee rules
+- [الشروط الشكلية للكتابة (Writing Format Requirements)](https://elrashid.github.io/pgv4/#/03_الملاحق/03_الشروط_الشكلية_للكتابة): Formatting and citation rules

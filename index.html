@@ -361,6 +361,20 @@
       .markdown-section h1 {
         font-size: 1.3rem;
       }
+      /* Backdrop overlay when sidebar is open on mobile */
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 49;
+      }
+      body:not(.close) .sidebar-backdrop {
+        display: block;
+      }
       .markdown-section h2 {
         font-size: 1.15rem;
       }
@@ -641,9 +655,27 @@
   <div id="app">...جاري التحميل</div>
 
   <script>
-    // Auto-hide sidebar on mobile
+    // Mobile sidebar behavior
     if (window.innerWidth <= 768) {
       document.body.classList.add('close');
+
+      // Create backdrop overlay
+      var backdrop = document.createElement('div');
+      backdrop.className = 'sidebar-backdrop';
+      document.body.appendChild(backdrop);
+
+      // Close sidebar when backdrop is tapped
+      backdrop.addEventListener('click', function () {
+        document.body.classList.add('close');
+      });
+
+      // Close sidebar when a link is clicked
+      document.addEventListener('click', function (e) {
+        var link = e.target.closest('.sidebar-nav a');
+        if (link) {
+          document.body.classList.add('close');
+        }
+      });
     }
   </script>
 

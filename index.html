@@ -336,7 +336,7 @@
         left: auto !important;
         transition: transform 0.3s ease;
         transform: translateX(0) !important;
-        z-index: 50;
+        z-index: 50 !important;
       }
       body.close .sidebar {
         transform: translateX(280px) !important;
@@ -396,7 +396,7 @@
         right: 0;
         left: auto;
         position: fixed;
-        z-index: 10;
+        z-index: 51 !important;
       }
       .docsify-pagination-container {
         flex-direction: column;
@@ -669,13 +669,6 @@
         document.body.classList.add('close');
       });
 
-      // Close sidebar when a link is clicked
-      document.addEventListener('click', function (e) {
-        var link = e.target.closest('.sidebar-nav a');
-        if (link) {
-          document.body.classList.add('close');
-        }
-      });
     }
   </script>
 
@@ -709,6 +702,13 @@
       },
 
       plugins: [
+        function mobileSidebarClose(hook) {
+          hook.doneEach(function () {
+            if (window.innerWidth <= 768) {
+              document.body.classList.add('close');
+            }
+          });
+        },
         function pdfReferencePanel(hook) {
           var currentPages = [];
           var eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];

@@ -361,20 +361,6 @@
       .markdown-section h1 {
         font-size: 1.3rem;
       }
-      /* Backdrop overlay when sidebar is open on mobile */
-      .sidebar-backdrop {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.3);
-        z-index: 49;
-      }
-      body:not(.close) .sidebar-backdrop {
-        display: block;
-      }
       .markdown-section h2 {
         font-size: 1.15rem;
       }
@@ -396,7 +382,7 @@
         right: 0;
         left: auto;
         position: fixed;
-        z-index: 51 !important;
+        z-index: 10;
       }
       .docsify-pagination-container {
         flex-direction: column;
@@ -692,19 +678,6 @@
 
       plugins: [
         function mobileSidebar(hook) {
-          hook.ready(function () {
-            if (window.innerWidth <= 768) {
-              document.body.classList.add('close');
-              // Create backdrop overlay
-              var backdrop = document.createElement('div');
-              backdrop.className = 'sidebar-backdrop';
-              document.body.appendChild(backdrop);
-              backdrop.addEventListener('click', function (e) {
-                e.stopPropagation();
-                document.body.classList.add('close');
-              });
-            }
-          });
           hook.doneEach(function () {
             if (window.innerWidth <= 768) {
               document.body.classList.add('close');

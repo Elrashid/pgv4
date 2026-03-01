@@ -488,16 +488,10 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
 
-    /* Content shift when panel is open - hide sidebar, fill remaining space */
-    body.pdf-open .sidebar,
-    body.pdf-open .sidebar-toggle {
-      display: none !important;
-    }
-
+    /* Content shift when panel is open - keep sidebar, content fills remaining space */
     body.pdf-open .content {
       margin-left: 40%;
-      margin-right: 0 !important;
-      width: 60% !important;
+      width: calc(60% - var(--sidebar-width)) !important;
       transition: margin-left 0.3s ease;
     }
 

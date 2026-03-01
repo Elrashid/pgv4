@@ -46,6 +46,10 @@
 * **مخططات تفاعلية**
   * [خريطة المسار الزمني للماجستير](master-timeline.html ':ignore')
   * [هرمية أولويات المخالفات](academic-priorities.html ':ignore')
+  * [مسار طالب الماجستير](master-flow.html ':ignore')
+  * [مسار طالب الدكتوراه](phd-flow.html ':ignore')
+  * [الإنذارات الأكاديمية والفصل](warnings-flow.html ':ignore')
+  * [دورة حياة الرسالة العلمية](thesis-flow.html ':ignore')
 
 * **جداول مرجعية**
   * [حالات الطلبة](sis_student_status.md)

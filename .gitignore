@@ -1,0 +1,12 @@
+input.pdf
+*.pyc
+__pycache__/
+.DS_Store
+Thumbs.db
+desktop-*.png
+mobile-*.png
+split-view-*.png
+print-view.png
+.playwright-mcp/
+.claude/
+*.jsx

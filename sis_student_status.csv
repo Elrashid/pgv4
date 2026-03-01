@@ -1,0 +1,12 @@
+STATUS_CODE, STATUS_DESC_S, OPERATION_DESC, STATUS_DESC, OPERATION_DESC_S, MOHE_STATUS_CODE
+1,Regular,إعادة القيد,منتظم,Activation,1
+2,Withdrawal From Semester,اعتذار,منسحب من الفصل,Withdrawal,2
+3,Postponed,التأجيل,مؤجل,Suspend,3
+4,Discontinued,الانقطاع,منقطع عن الدراسة,Abortion,4
+5,Dismiss,الفصل الاكاديمي,مفصول اكاديميا,Acadimic Adoption,8
+6,Terminated,طي قيد,مطوي قيده,Behaviour Adoption,10
+7,Graduated,التخرج,خريج,Graduation,7
+8,Temporary Dismissed,الفصل المؤقت,مفصول مؤقت,Temporary Terminated,8
+9,Disciplinary Dismissed,الفصل التأديبي,مفصول تأديبيا,Dismissed,9
+10,Withdrwal From University,انسحاب من الجامعة,منسحب من الجامعة,Aborted,10
+11,Passaway,الوفاة,متوفى,Decease,11

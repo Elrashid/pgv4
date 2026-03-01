@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>هرمية أولويات المخالفات الأكاديمية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(165deg, #0F172A 0%, #1E293B 40%, #0F172A 100%);
+      font-family: 'Noto Kufi Arabic', 'Segoe UI', Tahoma, sans-serif;
+      color: #E2E8F0;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
+      direction: rtl;
+    }
+
+    /* Ambient bg */
+    body::before {
+      content: '';
+      position: absolute; top: -200px; left: -200px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(220,38,38,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: absolute; bottom: -150px; right: -150px;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(109,40,217,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .container { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: #64748B; text-decoration: none; font-size: 13px; font-weight: 600;
+      margin-bottom: 20px; padding: 6px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
+    }
+    .back-link:hover { color: #A5B4FC; border-color: rgba(99,102,241,0.3); }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 48px; }
+    .header-badge {
+      display: inline-block; padding: 6px 20px; border-radius: 20px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px; font-weight: 600; letter-spacing: 1px; color: #94A3B8; margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: clamp(24px, 5vw, 36px); font-weight: 800;
+      margin: 0 0 12px; line-height: 1.4;
+      background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .header p {
+      font-size: 15px; color: #64748B; max-width: 550px; margin: 0 auto 20px; line-height: 1.8;
+    }
+
+    /* Toggle codes button */
+    .toggle-btn {
+      padding: 10px 24px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: #94A3B8; cursor: pointer; font-size: 14px; font-weight: 600;
+      font-family: inherit; transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .toggle-btn:hover { filter: brightness(1.1); }
+    .toggle-btn.active {
+      background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.4); color: #A5B4FC;
+    }
+
+    /* Status codes panel */
+    .codes-panel {
+      max-width: 720px; margin: 0 auto 40px; border-radius: 18px; overflow: hidden;
+      border: 1px solid rgba(99,102,241,0.15); background: rgba(99,102,241,0.03);
+      animation: slideDown 0.4s ease;
+    }
+    .codes-panel-header {
+      padding: 18px 24px; background: rgba(99,102,241,0.06);
+      border-bottom: 1px solid rgba(99,102,241,0.1);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .codes-panel-header h2 { margin: 0; font-size: 16px; font-weight: 700; color: #C7D2FE; }
+    .codes-panel-header span { font-size: 12px; color: #64748B; }
+    .codes-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px; padding: 16px 20px;
+    }
+    .code-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 12px;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+      transition: all 0.25s ease; cursor: default; position: relative;
+    }
+    .code-item.used { border-color: rgba(255,255,255,0.06); opacity: 1; }
+    .code-item.unused { opacity: 0.5; }
+    .code-item .dot {
+      position: absolute; top: 6px; left: 6px;
+      width: 6px; height: 6px; border-radius: 50%; opacity: 0.7;
+    }
+    .code-item .num {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; font-family: monospace; flex-shrink: 0;
+    }
+    .code-item .info .ar { font-size: 13px; font-weight: 600; color: #E2E8F0; line-height: 1.4; }
+    .code-item .info .en { font-size: 10px; color: #64748B; font-family: monospace; margin-top: 1px; }
+    .code-item .info .op { font-size: 10px; color: #94A3B8; margin-top: 2px; }
+    .codes-footer {
+      margin-top: 14px; padding: 10px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 10px; font-size: 12px; color: #64748B;
+      margin-right: 20px; margin-left: 20px; margin-bottom: 16px;
+    }
+    .codes-footer .dot { width: 6px; height: 6px; border-radius: 50%; background: #6366F1; flex-shrink: 0; }
+
+    /* Priority cards */
+    .priority-card {
+      position: relative; cursor: pointer; border-radius: 16px;
+      padding: 18px 24px; border: 1.5px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .priority-card:hover { transform: scale(1.005); }
+    .priority-card.active {
+      padding: 24px 28px; transform: scale(1.01);
+    }
+    .card-top {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .card-icon {
+      min-width: 52px; height: 52px; border-radius: 14px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon span { font-size: 20px; }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+    .card-tags .priority-tag {
+      font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 6px; white-space: nowrap;
+    }
+    .card-tags .code-tag {
+      font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 5px;
+      white-space: nowrap; font-family: monospace;
+    }
+    .card-title { margin: 0; font-size: clamp(14px, 3vw, 17px); font-weight: 700; color: #F1F5F9; line-height: 1.5; }
+    .card-arrow {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.3s ease; flex-shrink: 0; font-size: 14px; color: #64748B;
+    }
+    .priority-card.active .card-arrow { transform: rotate(180deg); }
+
+    /* Severity bar */
+    .severity-bar { width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; margin-top: 12px; }
+    .severity-fill { height: 100%; border-radius: 3px; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .severity-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: #64748B; }
+
+    /* Expanded details */
+    .card-details { overflow: hidden; animation: fadeIn 0.3s ease; }
+    .card-details .code-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .code-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 10px; transition: all 0.2s ease;
+    }
+    .code-badge .badge-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 7px;
+      font-size: 12px; font-weight: 800; font-family: monospace;
+    }
+    .code-badge .badge-ar { font-size: 13px; font-weight: 600; color: #E2E8F0; }
+    .code-badge .badge-en { font-size: 10px; color: #64748B; font-family: monospace; }
+
+    .detail-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;
+    }
+    .detail-card {
+      padding: 14px 16px; border-radius: 12px;
+      background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.04);
+    }
+    .detail-card .dt-label {
+      font-size: 11px; font-weight: 600; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .detail-card .dt-value { font-size: 13px; line-height: 1.8; color: #CBD5E1; }
+
+    /* Connector line */
+    .connector {
+      display: flex; justify-content: center; height: 32px; position: relative;
+    }
+    .connector .line {
+      width: 2px; height: 100%;
+    }
+    .connector .dot-end {
+      position: absolute; bottom: 0; width: 8px; height: 8px;
+      border-radius: 50%; opacity: 0.4; transform: translateY(50%);
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 720px; margin: 48px auto 0; padding: 20px 24px; border-radius: 14px;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); text-align: center;
+    }
+    .footer p { font-size: 13px; color: #64748B; margin: 0; line-height: 1.9; }
+    .footer strong { color: #94A3B8; font-weight: 600; }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    .hidden { display: none; }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      body { padding: 20px 10px; }
+      .codes-grid { grid-template-columns: 1fr 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .priority-card { padding: 14px 16px; }
+      .priority-card.active { padding: 18px 16px; }
+      .card-top { gap: 10px; }
+      .card-icon { min-width: 42px; height: 42px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">← العودة إلى اللائحة</a>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-badge">دليل مرجعي تفاعلي</div>
+    <h1>هرمية أولويات المخالفات الأكاديمية</h1>
+    <p>مبني على مواد لائحة الدراسات العليا في كلية الإمام مالك للشريعة والقانون · اضغط على أي مستوى لعرض التفاصيل الكاملة مع المراجع</p>
+    <button class="toggle-btn" id="toggleCodesBtn" onclick="toggleCodes()">
+      <span>🏷️</span>
+      <span id="toggleCodesText">عرض جدول رموز الحالة</span>
+    </button>
+  </div>
+
+  <!-- Status Codes Panel -->
+  <div class="codes-panel hidden" id="codesPanel">
+    <div class="codes-panel-header">
+      <h2>📊 جدول رموز حالة الطالب</h2>
+      <span id="codesCount"></span>
+    </div>
+    <div class="codes-grid" id="codesGrid"></div>
+    <div class="codes-footer">
+      <div class="dot"></div>
+      الرموز المضيئة هي المستخدمة في هرمية الأولويات · الرموز الباهتة حالات أخرى في النظام
+    </div>
+  </div>
+
+  <!-- Priority Cards -->
+  <div id="priorityCards"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>مبدأ الأولوية:</strong> عند تداخل أكثر من مخالفة، تُطبق المخالفة ذات الأولوية الأعلى أولاً وتتجاوز ما دونها</p>
+    <p style="margin-top:10px"><strong>ملاحظة:</strong> المفصول أكاديمياً (رمز ٥) يمكنه التقدم لبرنامج مختلف. المفصول تأديبياً (رمز ٩) لا يُقبل في أي برنامج بالكلية (مادة ١٩). رموز MOHE مطابقة لنظام وزارة التعليم العالي</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  function toAr(n) { return String(n).replace(/\d/g, function(d) { return eastern[+d]; }); }
+
+  /* ── Status codes: matched exactly with SIS (sis_student_status.csv) ── */
+  var statusCodes = [
+    { code: 1, ar: "منتظم", en: "Regular", op: "إعادة القيد", mohe: 1, color: "#22C55E" },
+    { code: 2, ar: "منسحب من الفصل", en: "Withdrawal From Semester", op: "اعتذار", mohe: 2, color: "#64748B" },
+    { code: 3, ar: "مؤجل", en: "Postponed", op: "التأجيل", mohe: 3, color: "#64748B" },
+    { code: 4, ar: "منقطع عن الدراسة", en: "Discontinued", op: "الانقطاع", mohe: 4, color: "#F59E0B" },
+    { code: 5, ar: "مفصول أكاديمياً", en: "Dismiss", op: "الفصل الأكاديمي", mohe: 8, color: "#EA580C" },
+    { code: 6, ar: "مطوي قيده", en: "Terminated", op: "طي قيد", mohe: 10, color: "#D97706" },
+    { code: 7, ar: "خريج", en: "Graduated", op: "التخرج", mohe: 7, color: "#22C55E" },
+    { code: 8, ar: "مفصول مؤقت", en: "Temporary Dismissed", op: "الفصل المؤقت", mohe: 8, color: "#DC2626" },
+    { code: 9, ar: "مفصول تأديبياً", en: "Disciplinary Dismissed", op: "الفصل التأديبي", mohe: 9, color: "#DC2626" },
+    { code: 10, ar: "منسحب من الجامعة", en: "Withdrawal From University", op: "انسحاب من الجامعة", mohe: 10, color: "#0284C7" },
+    { code: 11, ar: "متوفى", en: "Passaway", op: "الوفاة", mohe: 11, color: "#475569" }
+  ];
+
+  /* ── Priority hierarchy: updated with article references from all MD files ── */
+  var data = [
+    {
+      priority: "القصوى", prioritySub: "تأديبي",
+      label: "الانتحال والسرقة العلمية",
+      limit: "يُمنع منعاً باتاً — نسبة الانتحال المسموحة ≤ ٢٠٪ (باستثناء آيات القرآن والأحاديث والنصوص القانونية)",
+      penalty: "الرسالة: إلغاء البحث + إيقاف ٦ أشهر (مادة ١٣٢)، التكرار = فصل نهائي (مادة ١٣٣). أوراق بحثية: رسوب في المادة (مادة ١٣٥) ← رسوب في كل مواد الفصل (مادة ١٣٦) ← فصل نهائي في المرة الثالثة",
+      codes: [8, 9],
+      resolution: "يُطبق فوراً: يُلغي أي حقوق أكاديمية أو زمنية متبقية. مدة الإيقاف تُحسب من المدة القصوى للبرنامج (مادة ١٣٤). المفصول تأديبياً لا يُقبل في أي برنامج بالكلية (مادة ١٩)",
+      articles: "١٣٠-١٣٦، ١٩",
+      color: "#DC2626", accent: "#FCA5A5", bg: "rgba(220,38,38,0.08)", icon: "🚫", severity: 100
+    },
+    {
+      priority: "الأولى", prioritySub: "أكاديمي",
+      label: "انخفاض المعدل التراكمي عن ٣٫٠ نقاط (٨٠٪)",
+      limit: "٣ إنذارات متتالية: أول (م.١١٧) ← ثانٍ + إعادة مواد (م.١١٨) ← نهائي + فصل واحد أخير (م.١١٩). يبدأ الحساب بعد إنجاز ١٢ ساعة معتمدة",
+      penalty: "فصل أكاديمي من البرنامج (رمز ٥). المفصول أكاديمياً لا يُقبل في نفس البرنامج، لكن يمكنه التقدم لبرنامج مختلف (مادة ١٩)",
+      codes: [5],
+      resolution: "يسبق الرصيد الزمني: يُفصل الطالب حتى لو بقيت له فصول في الحد الأقصى. استثناء: فرصة فصل إضافي بقرار رئيس الكلية/مجلسها إن كان المعدل ≥ ٢٫٥ (مادة ١٢٠)",
+      articles: "١١٥، ١١٧-١٢١، ١٩",
+      color: "#EA580C", accent: "#FDBA74", bg: "rgba(234,88,12,0.07)", icon: "📉", severity: 80
+    },
+    {
+      priority: "الثانية", prioritySub: "زمني إجمالي",
+      label: "تجاوز الحد الأقصى للبقاء بالبرنامج",
+      limit: "٦ فصول دراسية اعتيادية — ماجستير (مادة ٧٤) / ١٢ فصلاً — دكتوراه (مادة ٧٤). فترة التأجيل لا تُحسب من المدة (مادة ٧٦). كل ١٢ ساعة معتمدة = فصل واحد (مادة ٧٧)",
+      penalty: "طي القيد / إنهاء العلاقة بالبرنامج (رمز ٦). يمكن إعادة التقديم بعد ٦ فصول (٣ سنوات) كحد أقصى مع احتمال احتساب ساعات سابقة بموافقة المجلس (مادة ٢٦)، أو كطالب جديد بعد ٤ فصول+ (مادة ٢٧)",
+      codes: [6],
+      resolution: "السقف المطلق: يُطبق بصرامة ويُلغي أي مهل داخلية. يجوز بقرار مجلس الكلية بناءً على تقرير إنجاز بحثي منح فصل إضافي واحد (مادة ٧٤)",
+      articles: "٧٢-٧٧، ٢٦-٢٧",
+      color: "#D97706", accent: "#FDE68A", bg: "rgba(217,119,6,0.07)", icon: "⏳", severity: 60
+    },
+    {
+      priority: "الثالثة", prioritySub: "إداري",
+      label: "الانقطاع أو تجاوز مدة التأجيل",
+      limit: "التأجيل: فصلان متتاليان أو متفرقان كحد أقصى (مادة ٢٥). يشترط إكمال فصل واحد على الأقل قبل طلب التأجيل (مادة ٢٢). الانقطاع ٤ أسابيع بدون طلب = تأجيل إجباري (مادة ٢٣)",
+      penalty: "تجاوز فصلين = إلغاء التسجيل نهائياً وتُسجل حالته «منسحب» (مادة ٢٥). المنسحب يمكنه إعادة التقديم خلال ٣ سنوات (مادة ٢٦) أو كطالب جديد بعد ذلك (مادة ٢٧)",
+      codes: [3, 4, 10],
+      resolution: "يُلغى التسجيل فوراً بغض النظر عن التفوق الأكاديمي أو رصيد السنوات. فترات التأجيل لا تُحسب من مدة البرنامج (مادة ٧٦/٢٨). لا تُحتسب مواد درسها في مؤسسات أخرى أثناء الانقطاع (مادة ٢٩)",
+      articles: "٢١-٣٠، ٧٦",
+      color: "#0284C7", accent: "#7DD3FC", bg: "rgba(2,132,199,0.07)", icon: "📋", severity: 40
+    },
+    {
+      priority: "الرابعة", prioritySub: "مواظبة",
+      label: "الغياب المتكرر عن المحاضرات",
+      limit: "١٠٪ غياب = إنذار أول (مادة ٨٢). ٢٠٪ = إنذار ثانٍ رسمي بموافقة العميد (مادة ٨٣). ٣٠٪ = حرمان من الامتحان النهائي (مادة ٨٤). الغياب المعذر والمقبول يُحسب ضمن نسبة ٣٠٪ (مادة ٨٥)",
+      penalty: "٣٠٪ بدون عذر: حرمان + رسوب في المادة (مادة ٨٤). ٣٠٪ بعذر مقبول: حرمان + تُسجل المادة «منسحب» (رمز ٨/٧) بموافقة العميد (مادة ٨٤)",
+      codes: [1, 2],
+      resolution: "يُطبق على مستوى المادة الواحدة. الرسوب يستلزم إعادة المادة الإجبارية (مادة ١٢٢). قد يُؤدي لانخفاض المعدل مما يُفعّل إنذارات الأولوية الأولى",
+      articles: "٨٠-٨٥، ١٢٢",
+      color: "#7C3AED", accent: "#C4B5FD", bg: "rgba(124,58,237,0.06)", icon: "📅", severity: 35
+    },
+    {
+      priority: "الخامسة", prioritySub: "زمني داخلي",
+      label: "التأخر في تقديم المخطط البحثي",
+      limit: "سنة واحدة (فصلان) بعد إنجاز ١٢ ساعة معتمدة — ماجستير (ملحق تسجيل الرسائل: مادة ١). فترة الإعداد لا تُحسب من المدة القصوى. موافقة المشرف ← اللجنة الدائمة (خلال أسبوعين) ← مجلس الدراسات العليا ← المجلس العلمي (ملحق م.٣)",
+      penalty: "تُخصم الفصول المهدرة فعلياً (وإن لم تُحسب من المدة رسمياً) مما يُضيّق مهلة إنجاز الرسالة ويُسرّع من خطر طي القيد",
+      codes: [1],
+      resolution: "الأضعف: التأخير يُقلص المدة المتاحة لإنجاز الرسالة. يبدأ حساب مهلة الرسالة من تاريخ موافقة المجلس العلمي (ملحق م.٣: مادة ٣/بند ١٢)",
+      articles: "٥٩، ٧١، ملحق تسجيل الرسائل م.١",
+      color: "#059669", accent: "#6EE7B7", bg: "rgba(5,150,105,0.06)", icon: "📝", severity: 25
+    },
+    {
+      priority: "السادسة", prioritySub: "زمني داخلي",
+      label: "تجاوز مدة إنجاز الرسالة",
+      limit: "٣ فصول / ١٫٥ سنة — ماجستير (مادة ٦٢) / ٨ فصول / ٤ سنوات — دكتوراه. الحد الأدنى: ٦ أشهر (ماجستير) / سنتان (دكتوراه). يمكن تمديد فصل واحد بقرار من المجلس. لقاء المشرف شهرياً (مادة ٦٢)",
+      penalty: "تعديل الخطة أو تقديم خطة جديدة (ملحق إعداد الرسائل: مادة ٥). إن رُفضت الرسالة بسبب خلل جوهري يمكن تقديم خطة جديدة ضمن المدة القصوى",
+      codes: [1],
+      resolution: "محكوم بالسقف المطلق (الأولوية الثانية): تسقط هذه المهلة إذا اصطدمت بالحد الأقصى الإجمالي للبرنامج. نسبة الانتحال ≤ ٢٠٪. يجب ألا تقل درجة المناقشة عن ٧٠٪ (مادة ٦٥)",
+      articles: "٦٢، ٦٥، ملحق إعداد الرسائل م.٥",
+      color: "#6D28D9", accent: "#C4B5FD", bg: "rgba(109,40,217,0.06)", icon: "📄", severity: 15
+    }
+  ];
+
+  var usedCodes = {};
+  data.forEach(function (d) { d.codes.forEach(function (c) { usedCodes[c] = true; }); });
+
+  // ── Render status codes ──
+  document.getElementById('codesCount').textContent = toAr(statusCodes.length) + ' حالة';
+  var codesGrid = document.getElementById('codesGrid');
+  statusCodes.forEach(function (sc) {
+    var isUsed = usedCodes[sc.code];
+    var div = document.createElement('div');
+    div.className = 'code-item ' + (isUsed ? 'used' : 'unused');
+    div.innerHTML =
+      (isUsed ? '<div class="dot" style="background:' + sc.color + '"></div>' : '') +
+      '<div class="num" style="background:' + sc.color + '18;color:' + sc.color + ';border:1px solid ' + sc.color + '22">' + toAr(sc.code) + '</div>' +
+      '<div class="info">' +
+        '<div class="ar">' + sc.ar + '</div>' +
+        '<div class="en">' + sc.en + '</div>' +
+        '<div class="op">العملية: ' + sc.op + '</div>' +
+        '<div class="op" style="font-family:monospace">MOHE: ' + toAr(sc.mohe) + '</div>' +
+      '</div>';
+    codesGrid.appendChild(div);
+  });
+
+  // ── Toggle codes panel ──
+  window.toggleCodes = function () {
+    var panel = document.getElementById('codesPanel');
+    var btn = document.getElementById('toggleCodesBtn');
+    var text = document.getElementById('toggleCodesText');
+    var show = panel.classList.contains('hidden');
+    panel.classList.toggle('hidden');
+    btn.classList.toggle('active');
+    text.textContent = show ? 'إخفاء جدول الرموز' : 'عرض جدول رموز الحالة';
+  };
+
+  // ── Render priority cards ──
+  var cardsEl = document.getElementById('priorityCards');
+  var activeIndex = null;
+
+  function getStatusCode(code) {
+    return statusCodes.find(function (s) { return s.code === code; });
+  }
+
+  function renderCards() {
+    cardsEl.innerHTML = '';
+    data.forEach(function (item, i) {
+      var isActive = activeIndex === i;
+      var wrapper = document.createElement('div');
+
+      // Card
+      var card = document.createElement('div');
+      card.className = 'priority-card' + (isActive ? ' active' : '');
+      card.style.borderColor = isActive ? item.color + '88' : '';
+      card.style.background = isActive
+        ? 'linear-gradient(135deg, ' + item.bg + ', rgba(15,23,42,0.6))'
+        : '';
+      if (isActive) card.style.boxShadow = '0 8px 32px ' + item.color + '15, 0 0 0 1px ' + item.color + '11';
+
+      card.onclick = function () {
+        activeIndex = isActive ? null : i;
+        renderCards();
+      };
+
+      // Top row
+      var top = '<div class="card-top">';
+      top += '<div class="card-icon" style="background:linear-gradient(145deg,' + item.color + '22,' + item.color + '11);border:1px solid ' + item.color + '33"><span>' + item.icon + '</span></div>';
+      top += '<div class="card-meta"><div class="card-tags">';
+      top += '<span class="priority-tag" style="color:' + item.color + ';background:' + item.color + '18">' + item.priority + ' · ' + item.prioritySub + '</span>';
+      item.codes.forEach(function (c) {
+        var sc = getStatusCode(c);
+        if (sc) top += '<span class="code-tag" style="color:' + sc.color + ';background:' + sc.color + '12;border:1px solid ' + sc.color + '25">رمز ' + toAr(sc.code) + ': ' + sc.ar + '</span>';
+      });
+      top += '</div><h3 class="card-title">' + item.label + '</h3></div>';
+      top += '<div class="card-arrow">▼</div>';
+      top += '</div>';
+
+      // Severity bar (always shown)
+      var severityHTML = '<div class="severity-bar"><div class="severity-fill" style="width:' + item.severity + '%;background:linear-gradient(90deg,' + item.color + ',' + item.color + '88)"></div></div>';
+
+      if (isActive) {
+        // Expanded content
+        var details = '<div style="margin-bottom:16px">' + top + '</div>';
+        details += '<div class="card-details">';
+        details += '<div style="margin-bottom:20px">' + severityHTML;
+        details += '<div class="severity-labels"><span>مستوى الخطورة</span><span>' + toAr(item.severity) + '%</span></div></div>';
+
+        // Code badges
+        details += '<div class="code-badges">';
+        item.codes.forEach(function (c) {
+          var sc = getStatusCode(c);
+          if (sc) {
+            details += '<div class="code-badge" style="background:' + sc.color + '18;border:1px solid ' + sc.color + '44">' +
+              '<div class="badge-num" style="background:' + sc.color + '22;color:' + sc.color + '">' + toAr(sc.code) + '</div>' +
+              '<div><div class="badge-ar">' + sc.ar + '</div><div class="badge-en">' + sc.en + '</div></div>' +
+            '</div>';
+          }
+        });
+        details += '</div>';
+
+        // Detail cards
+        var detailItems = [
+          { title: "الحد المسموح", value: item.limit, emoji: "📏" },
+          { title: "العقوبة", value: item.penalty, emoji: "⚖️" },
+          { title: "قاعدة حسم التداخل", value: item.resolution, emoji: "🔗" },
+          { title: "المواد المرجعية", value: "مواد اللائحة: " + (item.articles || "—"), emoji: "📚" }
+        ];
+        details += '<div class="detail-grid">';
+        detailItems.forEach(function (d) {
+          details += '<div class="detail-card">' +
+            '<div class="dt-label" style="color:' + item.accent + '"><span>' + d.emoji + '</span> ' + d.title + '</div>' +
+            '<div class="dt-value">' + d.value + '</div>' +
+          '</div>';
+        });
+        details += '</div></div>';
+
+        card.innerHTML = details;
+      } else {
+        card.innerHTML = top + severityHTML;
+      }
+
+      wrapper.appendChild(card);
+
+      // Connector line
+      if (i < data.length - 1) {
+        var nextColor = data[i + 1].color;
+        var conn = document.createElement('div');
+        conn.className = 'connector';
+        conn.innerHTML = '<div class="line" style="background:linear-gradient(to bottom,' + nextColor + '66,' + nextColor + '22)"></div>' +
+          '<div class="dot-end" style="background:' + nextColor + '"></div>';
+        wrapper.appendChild(conn);
+      }
+
+      cardsEl.appendChild(wrapper);
+    });
+  }
+
+  renderCards();
+})();
+</script>
+</body>
+</html>

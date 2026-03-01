@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لائحة الدراسات العليا - كلية الإمام مالك للشريعة والقانون</title>
+
+  <!-- Docsify theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+
+  <!-- Arabic typography and RTL overrides -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+
+    :root {
+      --base-font-family: 'Noto Naskh Arabic', 'Simplified Arabic', 'Traditional Arabic', serif;
+      --theme-color: #1B5E20;
+      --sidebar-width: 320px;
+    }
+
+    body {
+      font-family: var(--base-font-family);
+      direction: rtl;
+      text-align: right;
+      background-color: #fafafa;
+    }
+
+    /* Sidebar RTL - move to right side */
+    .sidebar {
+      direction: rtl;
+      text-align: right;
+      left: auto;
+      right: 0;
+      border-left: 1px solid #e0e0e0;
+      border-right: none;
+      background: linear-gradient(180deg, #f8fdf8 0%, #ffffff 100%);
+    }
+
+    .sidebar-nav {
+      direction: rtl;
+      padding-right: 15px;
+      padding-left: 0;
+    }
+
+    .sidebar-nav ul,
+    .sidebar-nav li {
+      list-style: none !important;
+      list-style-type: none !important;
+    }
+
+    .sidebar-nav li > a {
+      font-size: 0.92rem;
+      line-height: 1.9;
+      color: #444;
+      transition: color 0.2s, padding-right 0.2s;
+      display: block;
+      padding: 2px 0;
+    }
+
+    .sidebar-nav li > a:hover {
+      color: var(--theme-color);
+      padding-right: 5px;
+    }
+
+    .sidebar-nav li > a.active {
+      color: var(--theme-color);
+      font-weight: 600;
+      border-right: 3px solid var(--theme-color);
+      padding-right: 8px;
+    }
+
+    .sidebar-nav li > p {
+      font-weight: 700;
+      color: var(--theme-color);
+      margin: 12px 0 4px;
+      font-size: 0.95rem;
+    }
+
+    .sidebar-nav ul li ul {
+      padding-right: 18px;
+      padding-left: 0;
+    }
+
+    .sidebar .app-name-link {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--theme-color);
+      display: block;
+      padding: 10px 0;
+      border-bottom: 2px solid var(--theme-color);
+      margin-bottom: 10px;
+    }
+
+    /* Content area - offset to the left for RTL sidebar on right */
+    .content {
+      direction: rtl;
+      text-align: right;
+      margin-right: var(--sidebar-width);
+      margin-left: 0;
+    }
+
+    .markdown-section {
+      direction: rtl;
+      max-width: 100%;
+      font-size: 1.08rem;
+      line-height: 2.1;
+      color: #2c2c2c;
+      padding: 20px 24px;
+    }
+
+    /* Headings */
+    .markdown-section h1 {
+      border-bottom: 3px solid var(--theme-color);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      color: var(--theme-color);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .markdown-section h2 {
+      color: #2E7D32;
+      border-bottom: 2px solid #c8e6c9;
+      padding-bottom: 8px;
+      margin-top: 2em;
+      margin-bottom: 1em;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .markdown-section h3 {
+      color: #1B5E20;
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      padding: 6px 12px;
+      background-color: #f1f8e9;
+      border-right: 4px solid var(--theme-color);
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Bold text (article numbers) */
+    .markdown-section strong {
+      color: var(--theme-color);
+      font-weight: 700;
+    }
+
+    /* Paragraphs */
+    .markdown-section p {
+      margin: 0.8em 0;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    /* Tables */
+    .markdown-section table {
+      direction: rtl;
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .markdown-section table th,
+    .markdown-section table td {
+      border: 1px solid #e0e0e0;
+      padding: 12px 16px;
+      text-align: right;
+    }
+
+    .markdown-section table th {
+      background-color: var(--theme-color);
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .markdown-section table tr:nth-child(even) {
+      background-color: #f5f9f5;
+    }
+
+    .markdown-section table tr:hover {
+      background-color: #e8f5e9;
+    }
+
+    .markdown-section table td {
+      font-size: 0.98rem;
+    }
+
+    /* Lists */
+    .markdown-section ol,
+    .markdown-section ul {
+      direction: rtl;
+      padding-right: 2em;
+      padding-left: 0;
+    }
+
+    .markdown-section li {
+      margin: 4px 0;
+    }
+
+    /* Links */
+    .markdown-section a {
+      color: var(--theme-color);
+      text-decoration: none;
+      border-bottom: 1px dotted #81c784;
+      transition: border-color 0.2s;
+    }
+
+    .markdown-section a:hover {
+      border-bottom-color: var(--theme-color);
+      border-bottom-style: solid;
+    }
+
+    /* Horizontal rules */
+    .markdown-section hr {
+      border: none;
+      border-top: 2px solid #e8e8e8;
+      margin: 2em 0;
+    }
+
+    /* Scrollbar styling for sidebar */
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #c8e6c9;
+      border-radius: 4px;
+    }
+
+    /* Search RTL */
+    .search input {
+      direction: rtl;
+      text-align: right;
+      font-family: var(--base-font-family);
+      border-radius: 6px !important;
+      border: 1px solid #ddd !important;
+      padding: 8px 12px !important;
+      font-size: 0.9rem;
+    }
+
+    .search input:focus {
+      border-color: var(--theme-color) !important;
+      box-shadow: 0 0 0 2px rgba(27,94,32,0.15) !important;
+    }
+
+    .search .results-panel {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .search .matching-post {
+      border-bottom: 1px solid #eee;
+      padding: 8px 0;
+    }
+
+    /* Sidebar toggle for RTL - move to right side */
+    .sidebar-toggle {
+      left: auto;
+      right: var(--sidebar-width);
+    }
+
+    /* Override Docsify's default translateX(-300px) for RTL: move sidebar right to hide */
+    body.close .sidebar {
+      transform: translateX(var(--sidebar-width));
+    }
+
+    body.close .sidebar-toggle {
+      right: 0;
+    }
+
+    body.close .content {
+      margin-right: 0;
+    }
+
+    /* Pagination RTL - "previous" on right, "next" on left */
+    .docsify-pagination-container {
+      direction: rtl;
+      display: flex;
+      border-top: 2px solid #e8e8e8;
+      margin-top: 2.5em;
+      padding-top: 1.2em;
+    }
+
+    /* Each item takes half the width */
+    .pagination-item--previous,
+    .pagination-item--next {
+      flex: 1;
+    }
+
+    /* Previous on right side, text aligned right */
+    .pagination-item--previous {
+      text-align: right;
+    }
+
+    /* Next on left side, text aligned left */
+    .pagination-item--next {
+      text-align: left;
+    }
+
+    /* Flip the arrow SVGs for RTL */
+    .pagination-item--previous svg,
+    .pagination-item--next svg {
+      transform: scaleX(-1);
+    }
+
+    /* Label layout for RTL pagination arrows at the end */
+    .pagination-item-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Previous label: DOM = <svg←(flipped→)> <span>السابق</span>
+       RTL flex: SVG (first child) goes right (read first), span left (read after) = → السابق */
+    .pagination-item--previous .pagination-item-label {
+      direction: rtl;
+    }
+
+    /* Next label: DOM = <span>التالي</span> <svg→(flipped←)>
+       RTL flex: span goes right (read first), svg goes left (read after) = التالي ← */
+    .pagination-item--next .pagination-item-label {
+      direction: rtl;
+    }
+
+    /* Mobile */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        width: 280px;
+        transform: translateX(280px);
+        transition: transform 0.3s ease;
+      }
+      .content {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden;
+        transform: none !important;
+      }
+      .markdown-section {
+        font-size: 0.98rem;
+        padding: 12px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        line-height: 1.9;
+      }
+      .markdown-section h1 {
+        font-size: 1.3rem;
+      }
+      .markdown-section h2 {
+        font-size: 1.15rem;
+      }
+      .markdown-section h3 {
+        font-size: 1.05rem;
+        padding: 5px 10px;
+      }
+      .markdown-section table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 0.85rem;
+      }
+      .markdown-section table th,
+      .markdown-section table td {
+        padding: 8px 10px;
+      }
+      .sidebar-toggle {
+        right: 0;
+        left: auto;
+        position: fixed;
+        z-index: 10;
+      }
+      .docsify-pagination-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .pagination-item--previous,
+      .pagination-item--next {
+        text-align: center;
+      }
+    }
+
+    /* PDF Reference Panel */
+    .pdf-toggle-btn {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--theme-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 22px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .pdf-toggle-btn:hover {
+      background: #2E7D32;
+      transform: scale(1.08);
+    }
+
+    .pdf-toggle-btn.hidden {
+      display: none;
+    }
+
+    .pdf-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 40%;
+      height: 100vh;
+      background: #fafafa;
+      border-right: 2px solid #ddd;
+      z-index: 90;
+      overflow-y: auto;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      box-shadow: 3px 0 15px rgba(0,0,0,0.1);
+    }
+
+    .pdf-panel.open {
+      transform: translateX(0);
+    }
+
+    .pdf-panel-header {
+      position: sticky;
+      top: 0;
+      background: var(--theme-color);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .pdf-panel-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+    }
+
+    .pdf-panel-close:hover {
+      opacity: 0.7;
+    }
+
+    .pdf-panel-body {
+      padding: 16px;
+    }
+
+    .pdf-page-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .pdf-page-label {
+      text-align: center;
+      font-weight: 600;
+      color: var(--theme-color);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .pdf-page-img {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    /* Content shift when panel is open - hide sidebar, fill remaining space */
+    body.pdf-open .sidebar,
+    body.pdf-open .sidebar-toggle {
+      display: none !important;
+    }
+
+    body.pdf-open .content {
+      margin-left: 40%;
+      margin-right: 0 !important;
+      width: 60% !important;
+      transition: margin-left 0.3s ease;
+    }
+
+    body.pdf-open .markdown-section {
+      max-width: 100%;
+      padding: 12px 16px;
+    }
+
+    body.pdf-open .pdf-toggle-btn {
+      left: calc(40% + 12px);
+    }
+
+    @media screen and (max-width: 768px) {
+      .pdf-panel {
+        width: 100%;
+        z-index: 200;
+      }
+
+      body.pdf-open .content {
+        margin-left: 0 !important;
+      }
+
+      body.pdf-open .markdown-section {
+        padding: 12px !important;
+      }
+
+      body.pdf-open .pdf-toggle-btn {
+        left: 16px;
+        z-index: 201;
+      }
+
+      .pdf-toggle-btn {
+        bottom: 16px;
+        left: 16px;
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+      }
+    }
+
+    /* Print */
+    @media print {
+      .sidebar, .sidebar-toggle, .search, .docsify-pagination-container,
+      .pdf-panel, .pdf-toggle-btn {
+        display: none !important;
+      }
+      body.pdf-open .content {
+        margin-left: 0 !important;
+      }
+      .content {
+        margin: 0 !important;
+        padding: 20px !important;
+        left: 0 !important;
+        right: 0 !important;
+        position: static !important;
+        width: 100% !important;
+        transform: none !important;
+      }
+      .markdown-section {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 20px !important;
+        font-size: 12pt;
+        line-height: 1.8;
+        text-align: right;
+        box-sizing: border-box !important;
+      }
+      .markdown-section h1 {
+        font-size: 18pt;
+        page-break-after: avoid;
+      }
+      .markdown-section h2 {
+        font-size: 16pt;
+        page-break-after: avoid;
+      }
+      .markdown-section h3 {
+        font-size: 14pt;
+        page-break-after: avoid;
+      }
+      .markdown-section table {
+        page-break-inside: avoid;
+        font-size: 10pt;
+      }
+      .markdown-section table th {
+        background-color: #1B5E20 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .markdown-section table tr:nth-child(even) {
+        background-color: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      a[href]::after {
+        content: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">...جاري التحميل</div>
+
+  <script>
+    // Auto-hide sidebar on mobile
+    if (window.innerWidth <= 768) {
+      document.body.classList.add('close');
+    }
+  </script>
+
+  <script>
+    window.$docsify = {
+      name: 'لائحة الدراسات العليا',
+      nameLink: '/',
+      loadSidebar: true,
+      subMaxLevel: 0,
+      homepage: 'TOC.md',
+
+      search: {
+        placeholder: 'بحث...',
+        noData: 'لا توجد نتائج',
+        paths: 'auto',
+        depth: 3,
+        maxAge: 86400000,
+      },
+
+      auto2top: true,
+
+      pagination: {
+        previousText: 'السابق',
+        nextText: 'التالي',
+        crossChapter: true,
+        crossChapterText: true,
+      },
+
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+      },
+
+      plugins: [
+        function pdfReferencePanel(hook) {
+          var currentPages = [];
+          var eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+          function toEastern(n) {
+            return String(n).replace(/\d/g, function(d) { return eastern[+d]; });
+          }
+
+          hook.beforeEach(function (content) {
+            currentPages = [];
+            var match;
+            var re = /صفحة\s+(\d+)/g;
+            while ((match = re.exec(content)) !== null) {
+              var num = parseInt(match[1], 10);
+              if (currentPages.indexOf(num) === -1) currentPages.push(num);
+            }
+            currentPages.sort(function(a, b) { return a - b; });
+            return content;
+          });
+
+          hook.doneEach(function () {
+            // Toggle button
+            var btn = document.getElementById('pdf-toggle-btn');
+            if (!btn) {
+              btn = document.createElement('button');
+              btn.id = 'pdf-toggle-btn';
+              btn.className = 'pdf-toggle-btn';
+              btn.title = 'عرض الأصل';
+              btn.innerHTML = '📄';
+              document.body.appendChild(btn);
+
+              btn.addEventListener('click', function () {
+                var panel = document.getElementById('pdf-panel');
+                var isOpen = panel.classList.toggle('open');
+                document.body.classList.toggle('pdf-open', isOpen);
+              });
+            }
+
+            // Panel
+            var panel = document.getElementById('pdf-panel');
+            if (!panel) {
+              panel = document.createElement('div');
+              panel.id = 'pdf-panel';
+              panel.className = 'pdf-panel';
+              panel.innerHTML =
+                '<div class="pdf-panel-header">' +
+                  '<span>الصفحات الأصلية</span>' +
+                  '<button class="pdf-panel-close" id="pdf-panel-close">&times;</button>' +
+                '</div>' +
+                '<div class="pdf-panel-body" id="pdf-panel-body"></div>';
+              document.body.appendChild(panel);
+
+              document.getElementById('pdf-panel-close').addEventListener('click', function () {
+                panel.classList.remove('open');
+                document.body.classList.remove('pdf-open');
+              });
+            }
+
+            // Show/hide button based on available pages
+            if (currentPages.length === 0) {
+              btn.classList.add('hidden');
+              panel.classList.remove('open');
+              document.body.classList.remove('pdf-open');
+            } else {
+              btn.classList.remove('hidden');
+            }
+
+            // Populate panel with page images
+            var body = document.getElementById('pdf-panel-body');
+            var html = '';
+            currentPages.forEach(function (num) {
+              var padded = num < 10 ? '0' + num : '' + num;
+              html +=
+                '<div class="pdf-page-wrapper">' +
+                  '<div class="pdf-page-label">صفحة ' + toEastern(num) + '</div>' +
+                  '<img class="pdf-page-img" src="pdf_pages/page_' + padded + '.png" alt="صفحة ' + num + '" loading="lazy">' +
+                '</div>';
+            });
+            body.innerHTML = html;
+          });
+        },
+        function arabicNumerals(hook) {
+          var eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+          function toArabic(str) {
+            return str.replace(/\d/g, function(d) { return eastern[+d]; });
+          }
+          hook.doneEach(function () {
+            // Hide duplicate h1 when h2 has the same text
+            var h1 = document.querySelector('.markdown-section h1');
+            var h2 = document.querySelector('.markdown-section h2');
+            if (h1 && h2) {
+              var t1 = h1.textContent.replace(/\s+/g, '').replace(/:/g, '');
+              var t2 = h2.textContent.replace(/\s+/g, '').replace(/:/g, '');
+              if (t1 === t2) {
+                h1.style.display = 'none';
+              }
+            }
+
+            document.querySelectorAll('.sidebar-nav a').forEach(function (el) {
+              var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+              var node;
+              while (node = walker.nextNode()) {
+                if (/\d/.test(node.textContent)) {
+                  node.textContent = toArabic(node.textContent);
+                }
+              }
+            });
+            document.querySelectorAll(
+              '.markdown-section h1, .markdown-section h2, .markdown-section h3, '
+              + '.markdown-section a, .markdown-section strong, .markdown-section li, '
+              + '.markdown-section p, .markdown-section td, .markdown-section th'
+            ).forEach(function (el) {
+              var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+              var node;
+              while (node = walker.nextNode()) {
+                if (/\d/.test(node.textContent)) {
+                  node.textContent = toArabic(node.textContent);
+                }
+              }
+            });
+          });
+        }
+      ],
+    };
+  </script>
+
+  <!-- Docsify core -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+
+  <!-- Search plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+
+  <!-- Pagination plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+</body>
+</html>

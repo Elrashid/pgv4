@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>خريطة المسار الزمني لطالب الماجستير</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(170deg, #0C1222 0%, #162032 50%, #0C1222 100%);
+      font-family: 'Noto Kufi Arabic', 'Segoe UI', Tahoma, sans-serif;
+      color: #E2E8F0;
+      padding: 36px 16px;
+      position: relative;
+      overflow-x: hidden;
+      direction: rtl;
+    }
+
+    /* Ambient background circles */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 10%; right: -10%;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: absolute;
+      bottom: 5%; left: -5%;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(220,38,38,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .container { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 36px; }
+    .header-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 18px; border-radius: 20px;
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15);
+      font-size: 12px; font-weight: 600; color: #A5B4FC; margin-bottom: 14px;
+    }
+    .header h1 {
+      font-size: clamp(22px, 4.5vw, 32px); font-weight: 800;
+      margin: 0 0 10px; line-height: 1.5;
+      background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header p {
+      font-size: 14px; color: #64748B; max-width: 520px; margin: 0 auto; line-height: 1.8;
+    }
+
+    /* Section card */
+    .section-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px; padding: 28px 24px; margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 15px; font-weight: 700; color: #CBD5E1;
+      margin: 0 0 20px; display: flex; align-items: center; gap: 8px;
+    }
+    .section-title span { font-size: 18px; }
+
+    /* Semester grid */
+    .semester-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 6px; margin-bottom: 20px;
+    }
+    .semester-col {
+      text-align: center; padding: 12px 4px; border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.2s ease; cursor: default;
+    }
+    .semester-col:hover { background: rgba(255,255,255,0.06); }
+    .semester-col.warn { border-color: rgba(245,158,11,0.15); }
+    .semester-col.danger { border-color: rgba(220,38,38,0.2); }
+    .semester-col .label { font-size: 11px; color: #64748B; margin-bottom: 4px; }
+    .semester-col .num {
+      font-size: 24px; font-weight: 800; font-family: monospace; color: #E2E8F0;
+    }
+    .semester-col.warn .num { color: #FCD34D; }
+    .semester-col.danger .num { color: #FCA5A5; }
+    .semester-col .bar {
+      width: 60%; height: 3px; border-radius: 2px;
+      background: rgba(99,102,241,0.25); margin: 8px auto 0;
+    }
+    .semester-col.warn .bar { background: rgba(245,158,11,0.3); }
+    .semester-col.danger .bar { background: rgba(220,38,38,0.4); }
+
+    /* Phase bars */
+    .phase-row {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 6px; align-items: center; margin-bottom: 8px;
+    }
+    .phase-cell {
+      height: 36px; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .phase-label {
+      font-size: 11px; font-weight: 600; white-space: nowrap;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* Milestones */
+    .milestone-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 6px; margin-top: 16px;
+    }
+    .milestone {
+      font-size: 10px; font-weight: 600; text-align: center;
+      padding: 4px 2px; border-radius: 6px; line-height: 1.5;
+    }
+
+    /* Scenario tabs */
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .tab {
+      padding: 8px 16px; border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1.5px solid rgba(255,255,255,0.06);
+      color: #94A3B8; cursor: pointer; font-size: 13px; font-weight: 600;
+      font-family: inherit; transition: all 0.25s ease;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab:hover { filter: brightness(1.1); }
+    .tab.active { background: var(--tab-bg); border-color: var(--tab-border); color: var(--tab-color); }
+
+    /* Scenario description */
+    .scenario-desc {
+      padding: 14px 18px; border-radius: 12px; margin-bottom: 20px;
+      font-size: 13px; color: #CBD5E1; line-height: 1.8;
+    }
+    .scenario-desc strong { font-weight: 700; }
+
+    /* Scenario timeline cells */
+    .scenario-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+    }
+    .scenario-cell {
+      padding: 14px 8px; border-radius: 12px; text-align: center;
+      transition: all 0.3s ease;
+    }
+    .scenario-cell .sem { font-size: 10px; color: #64748B; margin-bottom: 4px; }
+    .scenario-cell .act {
+      font-size: 12px; font-weight: 600; line-height: 1.7;
+      min-height: 40px; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Status colors */
+    .status-safe { background: rgba(34,197,94,0.15); border: 1.5px solid rgba(34,197,94,0.4); }
+    .status-safe .act { color: #86EFAC; }
+    .status-warn { background: rgba(245,158,11,0.15); border: 1.5px solid rgba(245,158,11,0.4); }
+    .status-warn .act { color: #FCD34D; }
+    .status-danger { background: rgba(220,38,38,0.12); border: 1.5px solid rgba(220,38,38,0.35); }
+    .status-danger .act { color: #FCA5A5; }
+    .status-critical { background: rgba(220,38,38,0.2); border: 1.5px solid rgba(220,38,38,0.6); }
+    .status-critical .act { color: #FCA5A5; }
+    .status-success { background: rgba(6,182,212,0.15); border: 1.5px solid rgba(6,182,212,0.4); }
+    .status-success .act { color: #67E8F9; }
+    .status-expelled { background: rgba(220,38,38,0.25); border: 1.5px solid rgba(220,38,38,0.7); }
+    .status-expelled .act { color: #FCA5A5; }
+    .status-none { background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); }
+    .status-none .act { color: #475569; }
+
+    /* Risk alerts */
+    .risk-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-radius: 14px; transition: all 0.2s; margin-bottom: 10px;
+    }
+    .risk-badge {
+      min-width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .risk-badge span { font-size: 18px; font-weight: 800; font-family: monospace; }
+    .risk-info { flex: 1; }
+    .risk-info .title { font-size: 14px; font-weight: 700; color: #E2E8F0; margin-bottom: 4px; line-height: 1.5; }
+    .risk-info .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .risk-info .tag {
+      font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 600;
+    }
+    .risk-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .risk-icon span { font-size: 18px; }
+
+    /* Rules grid */
+    .rules-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;
+    }
+    .rule-card {
+      padding: 18px 16px; border-radius: 14px; transition: all 0.2s;
+    }
+    .rule-card .top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .rule-card .top span { font-size: 18px; }
+    .rule-card .top .lbl { font-size: 12px; font-weight: 600; color: #94A3B8; }
+    .rule-card .val { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .rule-card .sub { font-size: 11px; color: #64748B; line-height: 1.6; }
+
+    /* Overview cards */
+    .overview-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;
+    }
+    .overview-card {
+      padding: 16px 14px; border-radius: 14px; text-align: center;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .overview-card .ov-label { font-size: 11px; color: #64748B; margin-bottom: 6px; }
+    .overview-card .ov-val { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .overview-card .ov-sub { font-size: 10px; color: #64748B; line-height: 1.5; }
+
+    /* Grading table */
+    .grade-table { width: 100%; border-collapse: collapse; direction: rtl; }
+    .grade-table th, .grade-table td {
+      padding: 10px 14px; text-align: center; font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .grade-table th {
+      font-size: 11px; font-weight: 700; color: #94A3B8;
+      background: rgba(255,255,255,0.03); text-transform: uppercase;
+    }
+    .grade-table td { color: #CBD5E1; }
+    .grade-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* Assessment bars */
+    .assess-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 10px 14px;
+      border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    }
+    .assess-row .a-label { font-size: 13px; font-weight: 600; color: #E2E8F0; min-width: 140px; }
+    .assess-row .a-bar { flex: 1; height: 10px; border-radius: 5px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .assess-row .a-fill { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
+    .assess-row .a-pct { font-size: 14px; font-weight: 800; min-width: 48px; text-align: left; font-family: monospace; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.4s ease both; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: #64748B; text-decoration: none; font-size: 13px; font-weight: 600;
+      margin-bottom: 20px; padding: 6px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
+    }
+    .back-link:hover { color: #A5B4FC; border-color: rgba(99,102,241,0.3); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      body { padding: 20px 10px; }
+      .semester-grid, .phase-row, .milestone-grid, .scenario-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .section-card { padding: 18px 14px; }
+      .rules-grid { grid-template-columns: 1fr; }
+      .risk-item { flex-wrap: wrap; gap: 10px; }
+      .tabs { gap: 6px; }
+      .tab { font-size: 12px; padding: 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">← العودة إلى اللائحة</a>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-badge">
+      <span>🎓</span> برنامج الماجستير · ٣٣ ساعة معتمدة · ٣-٦ فصول دراسية
+    </div>
+    <h1>خريطة المسار الزمني لطالب الماجستير</h1>
+    <p>مخطط تفاعلي شامل يوضح المراحل والمخاطر والسيناريوهات المحتملة بالاستناد إلى مواد لائحة الدراسات العليا في كلية الإمام مالك للشريعة والقانون</p>
+  </div>
+
+  <!-- MAIN TIMELINE BAR -->
+  <div class="section-card">
+    <h2 class="section-title"><span>📅</span> الجدول الزمني · الفصول الدراسية الستة</h2>
+
+    <!-- Semester columns -->
+    <div class="semester-grid" id="semesterGrid"></div>
+
+    <!-- Phase bars -->
+    <div id="phaseBars"></div>
+
+    <!-- Milestones -->
+    <div class="milestone-grid" id="milestones"></div>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div class="section-card">
+    <h2 class="section-title"><span>🔀</span> السيناريوهات المحتملة</h2>
+    <div class="tabs" id="scenarioTabs"></div>
+    <div id="scenarioDesc"></div>
+    <div class="scenario-grid" id="scenarioTimeline"></div>
+  </div>
+
+  <!-- RISK ALERTS -->
+  <div class="section-card">
+    <h2 class="section-title"><span>⚠️</span> نقاط الخطر حسب الأولوية</h2>
+    <div id="riskAlerts"></div>
+  </div>
+
+  <!-- PROGRAM OVERVIEW -->
+  <div class="section-card">
+    <h2 class="section-title"><span>🏛️</span> نظرة عامة على البرنامج</h2>
+    <div id="programOverview"></div>
+  </div>
+
+  <!-- SUMMARY RULES -->
+  <div class="section-card">
+    <h2 class="section-title"><span>📐</span> القواعد والمواد التنظيمية</h2>
+    <div class="rules-grid" id="rulesGrid"></div>
+  </div>
+
+  <!-- GRADING SCALE -->
+  <div class="section-card">
+    <h2 class="section-title"><span>📊</span> سلم العلامات والتقديرات (مادة ١٠٩)</h2>
+    <div id="gradingScale"></div>
+  </div>
+
+  <!-- ASSESSMENT DISTRIBUTION -->
+  <div class="section-card">
+    <h2 class="section-title"><span>📝</span> توزيع درجات التقويم (مواد ٨٦-٨٧)</h2>
+    <div id="assessmentDist"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  function toAr(n) { return String(n).replace(/\d/g, function(d) { return eastern[+d]; }); }
+
+  var TOTAL = 6;
+
+  /* ── Phase bars: based on Articles 4/5, 59, 62, 72, 125 ── */
+  var phases = [
+    { id: "coursework", label: "المساقات (٢٤ س.م) مادة ٤٨", start: 0, end: 2, color: "#22C55E", icon: "📚" },
+    { id: "plan", label: "تقديم المخطط (مادة ٥٩، ملحق ١)", start: 2, end: 4, color: "#F59E0B", icon: "📝" },
+    { id: "thesis", label: "إنجاز الرسالة (٩ س.م) مادة ٦٢", start: 2, end: 5, color: "#6366F1", icon: "📄" },
+    { id: "defense", label: "المناقشة والتخرج (مادة ١٢٥)", start: 5, end: 6, color: "#06B6D4", icon: "🎓" }
+  ];
+
+  /* ── Risk alerts: with article references ── */
+  var risks = [
+    { semester: 1, label: "غياب ١٠٪ ← إنذار أول حضور (مادة ٨٢)", priority: "مواظبة", color: "#F59E0B", code: "١ منتظم", article: "٨٢" },
+    { semester: 2, label: "غياب ٢٠٪ ← إنذار ثانٍ حضور (مادة ٨٣)", priority: "مواظبة", color: "#EA580C", code: "١ منتظم", article: "٨٣" },
+    { semester: 2, label: "غياب ٣٠٪ ← حرمان + رسوب (مادة ٨٤)", priority: "مواظبة", color: "#DC2626", code: "١ منتظم", article: "٨٤" },
+    { semester: 2, label: "إنذار أول إن انخفض المعدل عن ٣٫٠ بعد ١٢ ساعة (مادة ١١٧)", priority: "أكاديمي", color: "#EA580C", code: "١ منتظم", article: "١١٧" },
+    { semester: 3, label: "إنذار ثانٍ + إعادة مواد بأقل من ٣ نقاط (مادة ١١٨)", priority: "أكاديمي", color: "#DC2626", code: "١ منتظم", article: "١١٨" },
+    { semester: 4, label: "إنذار نهائي + فصل واحد أخير (مادة ١١٩) + انتهاء مهلة المخطط", priority: "أكاديمي + زمني", color: "#DC2626", code: "١ منتظم", article: "١١٩" },
+    { semester: 5, label: "فصل أكاديمي إن بقي المعدل < ٣٫٠ (مادة ١١٩) أو انتهاء مهلة الرسالة", priority: "أكاديمي + زمني", color: "#DC2626", code: "٥ مفصول أكاديمياً", article: "١١٩" },
+    { semester: 6, label: "السقف المطلق ← طي القيد (مادة ٧٤) + فصل إضافي بقرار المجلس", priority: "زمني مطلق", color: "#DC2626", code: "٦ مطوي قيده", article: "٧٤" }
+  ];
+
+  /* ── Milestones: with article references ── */
+  var milestones = [
+    { semester: 0, label: "بداية البرنامج (٩-١٢ س.م/فصل) مادة ٧٨", icon: "🚀", color: "#22C55E" },
+    { semester: 1, label: "إنجاز ١٢ ساعة ← أهلية الإنذار الأكاديمي (مادة ١١٧)", icon: "⚡", color: "#F59E0B" },
+    { semester: 2, label: "إنجاز ١٢+ ساعة ← أهلية تسجيل الرسالة (مادة ٥٩)", icon: "✅", color: "#22C55E" },
+    { semester: 3, label: "اعتماد المخطط من المجلس العلمي (مادة ٧١)", icon: "📋", color: "#3B82F6" },
+    { semester: 5, label: "آخر موعد آمن لتسليم الرسالة (مادة ٦٢)", icon: "📄", color: "#8B5CF6" },
+    { semester: 6, label: "الحد الأقصى المطلق (مادة ٧٤)", icon: "🚨", color: "#DC2626" }
+  ];
+
+  /* ── Scenarios: corrected per Articles 22-28, 59, 62, 72-77, 117-120, 130-136 ── */
+  var scenarios = [
+    {
+      id: "ideal", title: "المسار المثالي", emoji: "🟢", color: "#22C55E",
+      desc: "إنهاء ٢٤ ساعة مساقات في فصلين (مادة ٤٨)، تقديم المخطط في الثالث (مادة ٥٩)، إنجاز الرسالة في ٣ فصول (مادة ٦٢)، مناقشة + تخرج بمعدل ≥ ٣٫٠ (مادة ١٢٥)",
+      timeline: [
+        { s: 1, act: "١٢ ساعة مساقات", status: "safe" },
+        { s: 2, act: "١٢ ساعة + تقديم المخطط", status: "safe" },
+        { s: 3, act: "اعتماد المخطط + بدء البحث", status: "safe" },
+        { s: 4, act: "كتابة الرسالة + لقاء شهري (مادة ٦٢)", status: "safe" },
+        { s: 5, act: "تسليم الرسالة + فحص الانتحال ≤٢٠٪", status: "safe" },
+        { s: 6, act: "المناقشة ≥٧٠٪ + التخرج 🎓 (مادة ٦٥)", status: "success" }
+      ]
+    },
+    {
+      id: "delayed_plan", title: "تأخر المخطط", emoji: "🟡", color: "#F59E0B",
+      desc: "تأخير تقديم المخطط لفصلين بعد إنجاز ١٢ ساعة (ملحق مادة ١) ← مهلة المخطط سنة واحدة فقط ← ضغط شديد على مهلة الرسالة (مادة ٦٢: ١٫٥ سنة أقصى)",
+      timeline: [
+        { s: 1, act: "١٢ ساعة مساقات", status: "safe" },
+        { s: 2, act: "١٢ ساعة مساقات", status: "safe" },
+        { s: 3, act: "لم يُقدم المخطط (مهلة سنة) ❌", status: "warn" },
+        { s: 4, act: "تقديم المخطط (آخر موعد: ملحق م.١)", status: "danger" },
+        { s: 5, act: "كتابة مضغوطة + تسليم", status: "danger" },
+        { s: 6, act: "مناقشة فورية أو طي قيد (مادة ٧٤) ⚠️", status: "critical" }
+      ]
+    },
+    {
+      id: "low_gpa", title: "انخفاض المعدل", emoji: "🔴", color: "#DC2626",
+      desc: "معدل تراكمي أقل من ٣٫٠ (٨٠٪) لثلاثة فصول متتالية ← ٣ إنذارات (مواد ١١٧-١١٩) ← فصل أكاديمي حتى لو بقيت فصول في الحد الأقصى. استثناء: فصل إضافي إن كان المعدل ≥ ٢٫٥ (مادة ١٢٠)",
+      timeline: [
+        { s: 1, act: "معدل < ٣٫٠ بعد ١٢ ساعة ← إنذار أول (م.١١٧)", status: "warn" },
+        { s: 2, act: "لم يرفع المعدل ← إنذار ثانٍ + إعادة مواد (م.١١٨)", status: "danger" },
+        { s: 3, act: "لم يرفع ← إنذار نهائي + فصل أخير (م.١١٩)", status: "critical" },
+        { s: 4, act: "فصل أكاديمي — رمز ٥ (م.١١٩) 🚫", status: "expelled" },
+        { s: 5, act: "—", status: "none" },
+        { s: 6, act: "—", status: "none" }
+      ]
+    },
+    {
+      id: "postpone", title: "تأجيل فصلين", emoji: "🟠", color: "#EA580C",
+      desc: "تأجيل فصلين (الحد الأقصى المسموح: مادة ٢٥). التأجيل لا يُحسب من المدة (مادة ٧٦/٢٨)، لكن يضيع وقتاً فعلياً ويؤخر إنجاز المساقات والمخطط. تجاوز فصلين ← طي القيد تلقائياً (مادة ٢٥)",
+      timeline: [
+        { s: 1, act: "١٢ ساعة مساقات", status: "safe" },
+        { s: 2, act: "تأجيل ① بعذر (مادة ٢٢)", status: "warn" },
+        { s: 3, act: "تأجيل ② — الحد الأقصى (مادة ٢٥)", status: "danger" },
+        { s: 4, act: "عودة + مساقات + مخطط (مضغوط)", status: "danger" },
+        { s: 5, act: "كتابة الرسالة (وقت محدود)", status: "danger" },
+        { s: 6, act: "تسليم + مناقشة (مادة ٧٤) ⚠️", status: "critical" }
+      ]
+    },
+    {
+      id: "plagiarism", title: "الانتحال العلمي", emoji: "⛔", color: "#7C2D12",
+      desc: "كشف انتحال (مادة ١٣٢): أول مخالفة ← إلغاء البحث + إيقاف ٦ أشهر (تُحسب من المدة: مادة ١٣٤). ثاني مخالفة ← فصل نهائي (مادة ١٣٣). انتحال في أوراق بحثية (مادة ١٣٥): رسوب في المادة ← رسوب في كل مواد الفصل ← فصل نهائي",
+      timeline: [
+        { s: 1, act: "مساقات — عمل طبيعي", status: "safe" },
+        { s: 2, act: "مساقات — عمل طبيعي", status: "safe" },
+        { s: 3, act: "كُشف انتحال في الرسالة (م.١٣٢) ⛔", status: "critical" },
+        { s: 4, act: "إلغاء البحث + إيقاف ٦ أشهر (م.١٣٢)", status: "expelled" },
+        { s: 5, act: "عودة بخطة جديدة (إن أمكن زمنياً)", status: "danger" },
+        { s: 6, act: "تكرار المخالفة = فصل نهائي (م.١٣٣) 🚫", status: "expelled" }
+      ]
+    },
+    {
+      id: "absence", title: "الغياب المتكرر", emoji: "🔵", color: "#0284C7",
+      desc: "غياب ١٠٪ ← إنذار أول (مادة ٨٢). غياب ٢٠٪ ← إنذار ثانٍ (مادة ٨٣). غياب ٣٠٪ بدون عذر ← حرمان من الامتحان + رسوب (مادة ٨٤). الغيابات المعذرة والمقبولة تُحسب من نسبة ٣٠٪ (مادة ٨٥)",
+      timeline: [
+        { s: 1, act: "حضور ≥٩٠٪ — آمن", status: "safe" },
+        { s: 2, act: "غياب ١٠٪ ← إنذار أول (م.٨٢)", status: "warn" },
+        { s: 3, act: "غياب ٢٠٪ ← إنذار رسمي (م.٨٣)", status: "danger" },
+        { s: 4, act: "غياب ٣٠٪ ← حرمان + رسوب (م.٨٤)", status: "expelled" },
+        { s: 5, act: "إعادة المادة (م.١٢٢) + تأخر زمني", status: "danger" },
+        { s: 6, act: "ضغط على الحد الأقصى ⚠️", status: "critical" }
+      ]
+    }
+  ];
+
+  /* ── Rules: comprehensive with article references ── */
+  var rules = [
+    { label: "الحد الأقصى للبرنامج (مادة ٧٤)", value: "٦ فصول + ١", sub: "٣ سنوات + فصل إضافي بقرار مجلس الكلية بناءً على تقرير الإنجاز", color: "#DC2626", icon: "⏱️" },
+    { label: "الحد الأدنى للبرنامج (مادة ٧٢)", value: "٣ فصول", sub: "سنة ونصف يتخللها فصل صيفي", color: "#22C55E", icon: "⏱️" },
+    { label: "إجمالي الساعات المعتمدة (مادة ٤٨)", value: "٣٣ ساعة", sub: "٢٤ ساعة مساقات + ٩ ساعات رسالة", color: "#3B82F6", icon: "📊" },
+    { label: "العبء الدراسي (مادة ٧٨)", value: "٩-١٢ ساعة", sub: "الحد الأدنى ٩ (دوام كامل)، أقل من ٩ = جزئي (مادة ٧٩)", color: "#8B5CF6", icon: "📚" },
+    { label: "الحد الأدنى لتسجيل الرسالة (مادة ٥٩)", value: "١٢ ساعة", sub: "بمعدل تراكمي لا يقل عن ٣ من ٤", color: "#059669", icon: "📋" },
+    { label: "مهلة تقديم المخطط (ملحق م.١)", value: "سنة واحدة", sub: "فصلان دراسيان بعد إنجاز ١٢ ساعة معتمدة", color: "#F59E0B", icon: "📝" },
+    { label: "مدة إنجاز الرسالة (مادة ٦٢)", value: "٦ أشهر – ١٫٥ سنة", sub: "الحد الأدنى ٦ أشهر، الأقصى ٣ فصول من اعتماد المجلس العلمي", color: "#6366F1", icon: "📄" },
+    { label: "التأجيل المسموح (مادة ٢٥)", value: "فصلان", sub: "لا تُحسب من المدة (مادة ٧٦)، تجاوزها = طي القيد تلقائياً", color: "#0284C7", icon: "⏸️" },
+    { label: "الحد الأدنى للمعدل (مادة ١١٥)", value: "٣ نقاط (٨٠٪)", sub: "أقل من ذلك = إنذار أكاديمي (مواد ١١٧-١١٩)", color: "#EA580C", icon: "📉" },
+    { label: "إنذارات المعدل (مواد ١١٧-١٢٠)", value: "٣ + استثناء", sub: "أول ← ثانٍ ← نهائي ← فصل. فصل إضافي إن كان المعدل ≥ ٢٫٥ (م.١٢٠)", color: "#EA580C", icon: "⚠️" },
+    { label: "درجة النجاح بالمادة (مادة ١١٠)", value: "٧٠٪ (C)", sub: "أقل من ٧٠٪ = رسوب (F) = ٠ نقطة ← إعادة إجبارية (م.١٢٢)", color: "#D97706", icon: "✅" },
+    { label: "مرتبة الشرف (مادة ١١٦)", value: "٤٫٠ أو ٣٫٨+", sub: "الأولى: معدل ٤ نقاط. الثانية: ٣٫٨ إلى أقل من ٤", color: "#22C55E", icon: "🏅" },
+    { label: "درجة النجاح بالرسالة (مادة ٦٥)", value: "٧٠٪ أقل تقدير", sub: "أقل من ٧٠٪ ← تعديل الخطة أو خطة جديدة (فرصة أخيرة)", color: "#6366F1", icon: "📄" },
+    { label: "نسبة الانتحال المسموحة", value: "≤ ٢٠٪", sub: "باستثناء آيات القرآن والأحاديث والنصوص القانونية (ملحق إعداد الرسائل)", color: "#DC2626", icon: "🚫" },
+    { label: "الحضور الأدنى (مادة ٨٤)", value: "٧٠٪", sub: "غياب ٣٠٪ = حرمان من الامتحان. ١٠٪ = إنذار أول، ٢٠٪ = إنذار ثانٍ", color: "#0284C7", icon: "📅" },
+    { label: "لقاء المشرف (مادة ٦٢)", value: "شهرياً", sub: "لقاء واحد على الأقل شهرياً خلال فترة إعداد الرسالة", color: "#059669", icon: "👨‍🏫" },
+    { label: "الاعتراض على العلامة (مادة ١٠٣)", value: "أسبوعان", sub: "خلال أسبوعين من إعلان النتائج، طلب خطي إلى العميد", color: "#64748B", icon: "📝" },
+    { label: "إعلان النتائج (مادة ١٠٠)", value: "٧٢ ساعة", sub: "خلال ٧٢ ساعة من انتهاء الامتحان", color: "#64748B", icon: "📢" }
+  ];
+
+  // ── Render semester columns ──
+  var semGrid = document.getElementById('semesterGrid');
+  for (var i = 1; i <= TOTAL; i++) {
+    var cls = 'semester-col';
+    if (i >= 5) cls += ' danger';
+    else if (i === 4) cls += ' warn';
+    semGrid.innerHTML += '<div class="' + cls + '">' +
+      '<div class="label">الفصل</div>' +
+      '<div class="num">' + toAr(i) + '</div>' +
+      '<div class="bar"></div>' +
+      '</div>';
+  }
+
+  // ── Render phase bars ──
+  var phaseBars = document.getElementById('phaseBars');
+  phases.forEach(function (p) {
+    var html = '<div class="phase-row">';
+    for (var i = 1; i <= TOTAL; i++) {
+      var inRange = i > p.start && i <= p.end;
+      var isStart = i === p.start + 1;
+      var isEnd = i === p.end;
+      var radius = isStart && isEnd ? '10px' :
+                   isStart ? '0 10px 10px 0' :
+                   isEnd ? '10px 0 0 10px' : '0';
+      var bg = inRange ? p.color + '18' : 'transparent';
+      var borderT = inRange ? '2px solid ' + p.color + '44' : '2px solid transparent';
+      var borderB = borderT;
+      var borderR = isStart ? '2px solid ' + p.color + '44' : 'none';
+      var borderL = isEnd ? '2px solid ' + p.color + '44' : 'none';
+      var content = isStart ? '<span class="phase-label" style="color:' + p.color + '">' + p.icon + ' ' + p.label + '</span>' : '';
+      html += '<div class="phase-cell" style="border-radius:' + radius +
+        ';background:' + bg +
+        ';border-top:' + borderT +
+        ';border-bottom:' + borderB +
+        ';border-right:' + borderR +
+        ';border-left:' + borderL + '">' + content + '</div>';
+    }
+    html += '</div>';
+    phaseBars.innerHTML += html;
+  });
+
+  // ── Render milestones ──
+  var msEl = document.getElementById('milestones');
+  for (var i = 1; i <= TOTAL; i++) {
+    var items = milestones.filter(function (m) { return m.semester === i || (m.semester === 0 && i === 1); });
+    var html = '<div>';
+    items.forEach(function (m) {
+      html += '<div class="milestone" style="color:' + m.color + ';background:' + m.color + '10">' +
+        m.icon + ' ' + m.label + '</div>';
+    });
+    html += '</div>';
+    msEl.innerHTML += html;
+  }
+
+  // ── Render scenario tabs ──
+  var activeScenario = 'ideal';
+  var tabsEl = document.getElementById('scenarioTabs');
+
+  function renderScenario() {
+    var scenario = scenarios.find(function (s) { return s.id === activeScenario; });
+
+    // Tabs
+    tabsEl.innerHTML = '';
+    scenarios.forEach(function (s) {
+      var btn = document.createElement('button');
+      btn.className = 'tab' + (activeScenario === s.id ? ' active' : '');
+      btn.style.setProperty('--tab-bg', s.color + '18');
+      btn.style.setProperty('--tab-border', s.color + '55');
+      btn.style.setProperty('--tab-color', s.color);
+      btn.innerHTML = '<span>' + s.emoji + '</span> ' + s.title;
+      btn.onclick = function () { activeScenario = s.id; renderScenario(); };
+      tabsEl.appendChild(btn);
+    });
+
+    // Description
+    var descEl = document.getElementById('scenarioDesc');
+    descEl.innerHTML = '<div class="scenario-desc" style="background:' + scenario.color + '08;border:1px solid ' + scenario.color + '20">' +
+      '<strong style="color:' + scenario.color + '">' + scenario.emoji + ' ' + scenario.title + ':</strong> ' + scenario.desc + '</div>';
+
+    // Timeline cells
+    var tlEl = document.getElementById('scenarioTimeline');
+    tlEl.innerHTML = '';
+    scenario.timeline.forEach(function (t, idx) {
+      var cell = document.createElement('div');
+      cell.className = 'scenario-cell status-' + t.status + ' fade-in';
+      cell.style.animationDelay = (idx * 0.08) + 's';
+      cell.innerHTML = '<div class="sem">ف' + toAr(t.s) + '</div>' +
+        '<div class="act">' + t.act + '</div>';
+      tlEl.appendChild(cell);
+    });
+  }
+  renderScenario();
+
+  // ── Render risk alerts ──
+  var riskEl = document.getElementById('riskAlerts');
+  risks.forEach(function (r) {
+    var emoji = r.semester === 6 ? '🚨' : r.semester >= 5 ? '🔴' : '🟡';
+    riskEl.innerHTML += '<div class="risk-item" style="background:' + r.color + '08;border:1px solid ' + r.color + '18">' +
+      '<div class="risk-badge" style="background:' + r.color + '15;border:1px solid ' + r.color + '25">' +
+        '<span style="color:' + r.color + '">ف' + toAr(r.semester) + '</span>' +
+      '</div>' +
+      '<div class="risk-info">' +
+        '<div class="title">' + r.label + '</div>' +
+        '<div class="tags">' +
+          '<span class="tag" style="background:' + r.color + '15;color:' + r.color + '">أولوية: ' + r.priority + '</span>' +
+          '<span class="tag" style="background:rgba(255,255,255,0.05);color:#94A3B8;font-family:monospace">رمز: ' + r.code + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="risk-icon" style="background:' + r.color + '12"><span>' + emoji + '</span></div>' +
+    '</div>';
+  });
+
+  // ── Render program overview ──
+  var overviewEl = document.getElementById('programOverview');
+  var programs = [
+    { label: "ماجستير الفقه وأصوله", mandatory: "١٢", elective: "١٢", thesis: "٩", total: "٣٣", color: "#22C55E", article: "مادة ٤" },
+    { label: "ماجستير علوم الكتاب والسنة", mandatory: "١٢", elective: "١٢", thesis: "٩", total: "٣٣", color: "#3B82F6", article: "مادة ٤" },
+    { label: "ماجستير القانون الخاص", mandatory: "١٨", elective: "٦", thesis: "٩", total: "٣٣", color: "#8B5CF6", article: "مادة ٥" },
+    { label: "ماجستير القانون العام", mandatory: "١٨", elective: "٦", thesis: "٩", total: "٣٣", color: "#06B6D4", article: "مادة ٥" }
+  ];
+  var ovHTML = '<div class="overview-grid" style="margin-bottom:20px">' +
+    '<div class="overview-card"><div class="ov-label">إجمالي الساعات</div><div class="ov-val" style="color:#22C55E">٣٣</div><div class="ov-sub">ساعة معتمدة (مادة ٤٨)</div></div>' +
+    '<div class="overview-card"><div class="ov-label">مساقات دراسية</div><div class="ov-val" style="color:#3B82F6">٢٤</div><div class="ov-sub">ساعة (إجبارية + اختيارية)</div></div>' +
+    '<div class="overview-card"><div class="ov-label">الرسالة العلمية</div><div class="ov-val" style="color:#8B5CF6">٩</div><div class="ov-sub">ساعات معتمدة</div></div>' +
+    '<div class="overview-card"><div class="ov-label">الحد الأدنى للمعدل</div><div class="ov-val" style="color:#EA580C">٣٫٠</div><div class="ov-sub">من ٤ نقاط (٨٠٪) — مادة ١١٥</div></div>' +
+    '<div class="overview-card"><div class="ov-label">درجة النجاح</div><div class="ov-val" style="color:#F59E0B">٧٠٪</div><div class="ov-sub">C = ٢ نقطة — مادة ١١٠</div></div>' +
+    '<div class="overview-card"><div class="ov-label">المدة</div><div class="ov-val" style="color:#DC2626">٣-٦</div><div class="ov-sub">فصول (١٫٥ – ٣ سنوات) — مادة ٧٢/٧٤</div></div>' +
+  '</div>';
+  ovHTML += '<div style="font-size:12px;color:#94A3B8;margin-bottom:12px;font-weight:600">توزيع الساعات حسب البرنامج:</div>';
+  ovHTML += '<table class="grade-table"><thead><tr><th>البرنامج</th><th>إجبارية</th><th>اختيارية</th><th>رسالة</th><th>المجموع</th><th>المرجع</th></tr></thead><tbody>';
+  programs.forEach(function (p) {
+    ovHTML += '<tr><td style="font-weight:600;color:' + p.color + '">' + p.label + '</td><td>' + p.mandatory + '</td><td>' + p.elective + '</td><td>' + p.thesis + '</td><td style="font-weight:700">' + p.total + '</td><td style="font-size:10px;color:#64748B">' + p.article + '</td></tr>';
+  });
+  ovHTML += '</tbody></table>';
+  overviewEl.innerHTML = ovHTML;
+
+  // ── Render rules ──
+  var rulesEl = document.getElementById('rulesGrid');
+  rules.forEach(function (r) {
+    rulesEl.innerHTML += '<div class="rule-card" style="background:' + r.color + '06;border:1px solid ' + r.color + '15">' +
+      '<div class="top"><span>' + r.icon + '</span><span class="lbl">' + r.label + '</span></div>' +
+      '<div class="val" style="color:' + r.color + '">' + r.value + '</div>' +
+      '<div class="sub">' + r.sub + '</div>' +
+    '</div>';
+  });
+
+  // ── Render grading scale (Article 109) ──
+  var gradeEl = document.getElementById('gradingScale');
+  var grades = [
+    { pct: "٩٠ – ١٠٠", letter: "A", points: "٤", rating: "ممتاز", color: "#22C55E" },
+    { pct: "٨٨ – أقل من ٩٠", letter: "A-", points: "٣٫٧٥", rating: "ممتاز", color: "#22C55E" },
+    { pct: "٨٥ – أقل من ٨٨", letter: "B+", points: "٣٫٥", rating: "جيد جداً", color: "#3B82F6" },
+    { pct: "٨٠ – أقل من ٨٥", letter: "B", points: "٣", rating: "جيد جداً", color: "#3B82F6" },
+    { pct: "٧٥ – أقل من ٨٠", letter: "C+", points: "٢٫٥", rating: "جيد", color: "#F59E0B" },
+    { pct: "٧٠ – أقل من ٧٥", letter: "C", points: "٢", rating: "جيد (الحد الأدنى للنجاح)", color: "#F59E0B" },
+    { pct: "أقل من ٧٠", letter: "F", points: "٠", rating: "راسب — إعادة إجبارية (م.١٢٢)", color: "#DC2626" }
+  ];
+  var gHTML = '<table class="grade-table"><thead><tr><th>النسبة المئوية</th><th>الحرف</th><th>النقاط</th><th>التقدير</th></tr></thead><tbody>';
+  grades.forEach(function (g) {
+    gHTML += '<tr><td>' + g.pct + '</td><td style="font-weight:800;color:' + g.color + ';font-family:monospace;font-size:16px">' + g.letter + '</td><td style="font-weight:700;font-family:monospace">' + g.points + '</td><td style="color:' + g.color + ';font-weight:600">' + g.rating + '</td></tr>';
+  });
+  gHTML += '</tbody></table>';
+  gHTML += '<div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">';
+  gHTML += '<div style="padding:8px 14px;border-radius:8px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);font-size:11px;color:#86EFAC"><strong>مرتبة الشرف الأولى:</strong> معدل ٤٫٠ (مادة ١١٦)</div>';
+  gHTML += '<div style="padding:8px 14px;border-radius:8px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);font-size:11px;color:#93C5FD"><strong>مرتبة الشرف الثانية:</strong> معدل ٣٫٨ إلى أقل من ٤ (مادة ١١٦)</div>';
+  gHTML += '</div>';
+  gradeEl.innerHTML = gHTML;
+
+  // ── Render assessment distribution (Articles 86-87) ──
+  var assessEl = document.getElementById('assessmentDist');
+  var assessHTML = '<div style="font-size:12px;color:#94A3B8;margin-bottom:14px;font-weight:600">مساقات الماجستير (مادة ٨٦):</div>';
+  var masterAssess = [
+    { label: "أعمال الفصل (مشاركات، أبحاث)", pct: 40, color: "#22C55E" },
+    { label: "امتحان نصف الفصل", pct: 20, color: "#3B82F6" },
+    { label: "الامتحان النهائي", pct: 40, color: "#8B5CF6" }
+  ];
+  masterAssess.forEach(function (a) {
+    assessHTML += '<div class="assess-row">' +
+      '<div class="a-label">' + a.label + '</div>' +
+      '<div class="a-bar"><div class="a-fill" style="width:' + a.pct + '%;background:' + a.color + '"></div></div>' +
+      '<div class="a-pct" style="color:' + a.color + '">' + toAr(a.pct) + '٪</div>' +
+    '</div>';
+  });
+  assessHTML += '<div style="margin-top:8px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);font-size:11px;color:#64748B;line-height:1.8">';
+  assessHTML += '<strong style="color:#94A3B8">ملاحظات:</strong> يشمل تقويم أعمال الفصل: المشاركة في النقاشات العلمية، البحوث الجماعية والعروض التقديمية، والأوراق البحثية الفردية (مادة ٨٧). ';
+  assessHTML += 'تُسلم نتائج الامتحان النصفي خلال أسبوع (مادة ٨٩). تُرفع العلامات خلال أسبوعين (مادة ٨٩). تُعلن النتائج النهائية خلال ٧٢ ساعة من الامتحان (مادة ١٠٠).';
+  assessHTML += '</div>';
+  assessEl.innerHTML = assessHTML;
+
+})();
+</script>
+</body>
+</html>

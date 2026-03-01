@@ -50,6 +50,7 @@
   * [مسار طالب الدكتوراه](phd-flow.html ':ignore')
   * [الإنذارات الأكاديمية والفصل](warnings-flow.html ':ignore')
   * [دورة حياة الرسالة العلمية](thesis-flow.html ':ignore')
+  * [مستكشف اللائحة الكامل](regulations-explorer.html ':ignore')
 
 * **جداول مرجعية**
   * [حالات الطلبة](sis_student_status.md)

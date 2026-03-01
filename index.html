@@ -678,6 +678,17 @@
 
       plugins: [
         function mobileSidebar(hook) {
+          hook.ready(function () {
+            if (window.innerWidth <= 768) {
+              // Prevent docsify's body-level click handler from toggling
+              // the sidebar when tapping on page content
+              document.querySelector('.content').addEventListener('click', function (e) {
+                if (!e.target.closest('.sidebar-toggle')) {
+                  e.stopPropagation();
+                }
+              });
+            }
+          });
           hook.doneEach(function () {
             if (window.innerWidth <= 768) {
               document.body.classList.add('close');

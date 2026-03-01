@@ -135,6 +135,10 @@
       padding-left: 0;
     }
 
+    .sidebar-close-btn {
+      display: none;
+    }
+
     .sidebar .app-name-link {
       font-size: 1.15rem;
       font-weight: 700;
@@ -436,6 +440,27 @@
         left: auto;
         position: fixed;
         z-index: 10;
+      }
+      .sidebar-close-btn {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        font-size: 20px;
+        line-height: 1;
+        color: #666;
+        cursor: pointer;
+        z-index: 60;
+        transition: background 0.2s, color 0.2s;
+      }
+      .sidebar-close-btn:hover {
+        background: #e0e0e0;
+        color: #333;
       }
       .docsify-pagination-container {
         flex-direction: column;
@@ -740,6 +765,20 @@
                   e.stopPropagation();
                 }
               });
+
+              // Add close button inside sidebar
+              var sidebar = document.querySelector('.sidebar');
+              if (sidebar && !document.querySelector('.sidebar-close-btn')) {
+                var closeBtn = document.createElement('button');
+                closeBtn.className = 'sidebar-close-btn';
+                closeBtn.innerHTML = '&times;';
+                closeBtn.title = 'إغلاق القائمة';
+                closeBtn.addEventListener('click', function (e) {
+                  e.stopPropagation();
+                  document.body.classList.add('close');
+                });
+                sidebar.insertBefore(closeBtn, sidebar.firstChild);
+              }
             }
           });
           hook.doneEach(function () {
